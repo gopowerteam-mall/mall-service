@@ -14,7 +14,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
 	npm
 
 # - 安装pnpm
-RUN npm install -g pnpm --registry=https://registry.npmmirror.com
+RUN npm install -g pnpm @nestjs/cli --registry=https://registry.npmmirror.com
 
 # STEP2: 构建依赖镜像
 FROM base as installer
