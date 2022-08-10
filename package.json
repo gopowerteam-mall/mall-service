@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "npx husky install",
     "commit": "git-cz",
     "prebuild": "rimraf dist",
     "build": "nest build",
