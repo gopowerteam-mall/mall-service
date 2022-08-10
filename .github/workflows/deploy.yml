@@ -16,9 +16,6 @@ jobs:
           vercel-args: '--prod'
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          alias-domains: | 
-            mall-service-git-master-zhuchentong.vercel.app
-Automatic URL
       - name: preview-url
         run: |
           echo ${{ steps.vercel-action.outputs.preview-url }}
