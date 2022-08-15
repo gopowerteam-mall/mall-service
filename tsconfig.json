@@ -12,6 +12,8 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
+    "importHelpers": true,
+    "preserveSymlinks": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
