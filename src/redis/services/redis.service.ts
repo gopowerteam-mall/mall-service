@@ -14,6 +14,7 @@ export class RedisService implements CacheOptionsFactory {
     return {
       store: redisStore,
       ...this.configService.get('redis'),
+      ttl: 60 * 60 * 24,
     }
   }
 }

@@ -2,8 +2,12 @@ import { Module } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { ConfigModule } from '@nestjs/config'
-import { DatabaseModule } from './modules/database/database.module'
-import { RedisModule } from './modules/redis/redis.module'
+import { DatabaseModule } from './database/database.module'
+import { RedisModule } from './redis/redis.module'
+import { AuthModule } from './auth/auth.module'
+import { LoggerModule } from './logger/logger.module'
+import { WeappModule } from './modules/weapp/weapp.module'
+import { AdminModule } from './modules/admin/admin.module'
 import configuration from './config/configuration'
 
 @Module({
@@ -16,6 +20,10 @@ import configuration from './config/configuration'
     }),
     DatabaseModule,
     RedisModule,
+    AuthModule,
+    LoggerModule,
+    WeappModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
