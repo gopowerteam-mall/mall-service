@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@commitlint/cli': 17.0.2
   '@commitlint/config-conventional': 17.0.2
+  '@fastify/static': ^6.5.0
   '@nestjs/cli': 9.0.0
   '@nestjs/common': 9.0.8
   '@nestjs/config': ^2.2.0
@@ -70,8 +71,8 @@ dependencies:
   '@nestjs/jwt': 9.0.0_@nestjs+common@9.0.8
   '@nestjs/passport': 9.0.0_lzwobzvlbs6mk2ist2cogkss2e
   '@nestjs/platform-express': 9.0.8_cw6o3dkuyuli4a5gq7b223evly
-  '@nestjs/platform-fastify': 9.0.9_cw6o3dkuyuli4a5gq7b223evly
-  '@nestjs/swagger': 6.0.5_t5c7ncqnk2fwu54zrommbwzp4i
+  '@nestjs/platform-fastify': 9.0.9_ibrc622q32qy2sifp6dqvgccwm
+  '@nestjs/swagger': 6.0.5_j4gijhqzfa4ecn7k6y4zaypv4m
   '@nestjs/typeorm': 9.0.1_y2o4tfyqpkk2hlczj3r36cju7u
   bcrypt: 5.0.1
   cache-manager: 4.1.0
@@ -95,6 +96,7 @@ dependencies:
 devDependencies:
   '@commitlint/cli': 17.0.2
   '@commitlint/config-conventional': 17.0.2
+  '@fastify/static': 6.5.0
   '@nestjs/cli': 9.0.0
   '@nestjs/schematics': 9.0.1_typescript@4.7.4
   '@nestjs/testing': 9.0.8_lwpb2d46aphloofqfhxfte74su
@@ -723,6 +725,10 @@ packages:
       - supports-color
     dev: true
 
+  /@fastify/accept-negotiator/1.0.0:
+    resolution: {integrity: sha512-4R/N2KfYeld7A5LGkai+iUFMahXcxxYbDp+XS2B1yuL3cdmZLJ9TlCnNzT3q5xFTqsYm0GPpinLUwfSwjcVjyA==}
+    engines: {node: '>=14'}
+
   /@fastify/ajv-compiler/3.1.2:
     resolution: {integrity: sha512-m2nzzQJeuVmeGOB9rnII9sZiY8AZ02a9WMQfMBfK1jxdFnxm3FPYKGbYpPjODj4halNogwpolyugbTNpnDCi0A==}
     dependencies:
@@ -765,6 +771,19 @@ packages:
       path-to-regexp: 6.2.1
       reusify: 1.0.4
     dev: false
+
+  /@fastify/static/6.5.0:
+    resolution: {integrity: sha512-WEk6iqgejA6ivjkvbJ47A+uMci225z5lZwLXCXZS3ZYR/kYje1gzzarkKKGL6TWpBw6smkOzxA7dfEoY0347Nw==}
+    dependencies:
+      '@fastify/accept-negotiator': 1.0.0
+      content-disposition: 0.5.4
+      fastify-plugin: 4.2.0
+      glob: 8.0.3
+      p-limit: 3.1.0
+      readable-stream: 4.1.0
+      send: 0.18.0
+    transitivePeerDependencies:
+      - supports-color
 
   /@humanwhocodes/config-array/0.10.4:
     resolution: {integrity: sha512-mXAIHxZT3Vcpg83opl1wGlVZ9xydbfZO3r5YfRSH6Gpp2J/PfdBP0wbDa2sO6/qRbcalpoevVyW6A/fI6LfeMw==}
@@ -1245,7 +1264,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@nestjs/platform-fastify/9.0.9_cw6o3dkuyuli4a5gq7b223evly:
+  /@nestjs/platform-fastify/9.0.9_ibrc622q32qy2sifp6dqvgccwm:
     resolution: {integrity: sha512-vDAQIcBOA8B6O2cg2pPv6BKfeMAZ1M235enHsUFF+8d5WVd8xS8E62wHBqEjdcb08H1Icz4uObrdyRCzDLRRrA==}
     peerDependencies:
       '@fastify/static': ^6.0.0
@@ -1261,6 +1280,7 @@ packages:
       '@fastify/cors': 8.1.0
       '@fastify/formbody': 7.0.1
       '@fastify/middie': 8.0.0
+      '@fastify/static': 6.5.0
       '@nestjs/common': 9.0.8_mgy7w2bm3yhmntrbe3boyroj6m
       '@nestjs/core': 9.0.8_ynoyn6d36ot4yn5mj6f7nnecsq
       fastify: 4.4.0
@@ -1301,7 +1321,7 @@ packages:
       - chokidar
     dev: true
 
-  /@nestjs/swagger/6.0.5_t5c7ncqnk2fwu54zrommbwzp4i:
+  /@nestjs/swagger/6.0.5_j4gijhqzfa4ecn7k6y4zaypv4m:
     resolution: {integrity: sha512-Iy6/Xvd+YVC2F6flIDew5/VnpM2m7kK3IMoft0JqQc0RVXEO45+9gSasN6c8E/s0PbOy9de055mivAhFjk/+lA==}
     peerDependencies:
       '@fastify/static': ^6.0.0
@@ -1312,6 +1332,7 @@ packages:
       '@fastify/static':
         optional: true
     dependencies:
+      '@fastify/static': 6.5.0
       '@nestjs/common': 9.0.8_mgy7w2bm3yhmntrbe3boyroj6m
       '@nestjs/core': 9.0.8_ynoyn6d36ot4yn5mj6f7nnecsq
       '@nestjs/mapped-types': 1.1.0_olu2qk7o5woiurxhoc3jwnsxgu
@@ -1960,7 +1981,6 @@ packages:
     engines: {node: '>=6.5'}
     dependencies:
       event-target-shim: 5.0.1
-    dev: false
 
   /abstract-logging/2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
@@ -2330,6 +2350,11 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+
+  /brace-expansion/2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+    dependencies:
+      balanced-match: 1.0.2
 
   /braces/3.0.2:
     resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
@@ -3270,7 +3295,6 @@ packages:
   /event-target-shim/5.0.1:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
     engines: {node: '>=6'}
-    dev: false
 
   /events/3.3.0:
     resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
@@ -3446,7 +3470,6 @@ packages:
 
   /fastify-plugin/4.2.0:
     resolution: {integrity: sha512-hovKzEXZc2YgeuXn41/2EA/IaIOdRu1pB9WKgnzDBj3lhKSdDCEsckHa7I6LiT/LhflvAQX7ZY8IQ6eBX0htTg==}
-    dev: false
 
   /fastify/4.4.0:
     resolution: {integrity: sha512-ePI4g9vPJXIBF4YlVcDSLxjvtdTrlM8QzdgYAPFGdCH+rot+4MXoFFAUb10fGrIcRRjaq6CvcbIzxiWQzMMHkw==}
@@ -3786,6 +3809,16 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+
+  /glob/8.0.3:
+    resolution: {integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      fs.realpath: 1.0.0
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 5.1.0
+      once: 1.4.0
 
   /global-dirs/0.1.1:
     resolution: {integrity: sha512-NknMLn7F2J7aflwFOlGdNIuCDpN3VGoSoB+aap3KABFWbHVn1TCgFC+np23J8W2BiZbjfEw3BFBycSMv1AFblg==}
@@ -5079,6 +5112,12 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
 
+  /minimatch/5.1.0:
+    resolution: {integrity: sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+
   /minimist-options/4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
     engines: {node: '>= 6'}
@@ -5369,7 +5408,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yocto-queue: 0.1.0
-    dev: true
 
   /p-locate/4.1.0:
     resolution: {integrity: sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==}
@@ -5816,7 +5854,6 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       abort-controller: 3.0.0
-    dev: false
 
   /readdirp/3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
@@ -7177,4 +7214,3 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-    dev: true

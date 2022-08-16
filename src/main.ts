@@ -1,3 +1,4 @@
+import { RequestMethod } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import {
@@ -92,7 +93,14 @@ async function bootstrap() {
   )
 
   // 安装全局前缀
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api', {
+    exclude: [
+      {
+        path: '',
+        method: RequestMethod.ALL,
+      },
+    ],
+  })
 
   // 安装Swagger
   setupSwagger(app)
