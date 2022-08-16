@@ -7,8 +7,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common'
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger'
-import { addIndex, omit } from 'ramda'
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger'
+import { omit } from 'ramda'
 import { PasswordAuthGuard } from 'src/auth/guards/password.guard'
 import { RefreshTokenGuard } from 'src/auth/guards/refresh-token.guard'
 import { AuthService } from 'src/auth/services/auth.service'
@@ -18,6 +23,7 @@ import { Admin } from 'src/entities/admin.entity'
 import { LoginDTO } from '../dtos/admin.dto'
 import { AppInitDTO } from '../dtos/app.dto'
 import { AdminService } from '../services/admin.service'
+import { TokenResponse } from '../responses/app.response'
 
 @Controller('app')
 @ApiTags('app')
@@ -72,6 +78,7 @@ export class AppController {
   @Post('login')
   @UseGuards(PasswordAuthGuard)
   @ApiOperation({ operationId: 'login', summary: '管理员登录' })
+  @ApiOkResponse({ type: TokenResponse })
   login(@RequestUser() admin: Admin, @Body() LoginDTO: LoginDTO) {
     return this.authService.adminSign(admin)
   }
@@ -79,6 +86,7 @@ export class AppController {
   @Public()
   @Get('token')
   @ApiOperation({ operationId: 'token', summary: '刷新Token' })
+  @ApiOkResponse({ type: TokenResponse })
   @UseGuards(RefreshTokenGuard)
   token(@RequestUser() admin: Admin) {
     if (admin) {
