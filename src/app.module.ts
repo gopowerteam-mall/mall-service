@@ -8,6 +8,7 @@ import { LoggerModule } from './logger/logger.module'
 import { WeappModule } from './modules/weapp/weapp.module'
 import { AdminModule } from './modules/admin/admin.module'
 import configuration from './config/configuration'
+import { RouterModule } from '@nestjs/core'
 
 @Module({
   imports: [
@@ -23,6 +24,16 @@ import configuration from './config/configuration'
     LoggerModule,
     WeappModule,
     AdminModule,
+    RouterModule.register([
+      {
+        path: 'admin',
+        module: AdminModule,
+      },
+      {
+        path: 'weapp',
+        module: WeappModule,
+      },
+    ]),
   ],
   controllers: [AppController],
 })

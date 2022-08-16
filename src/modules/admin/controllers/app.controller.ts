@@ -19,7 +19,7 @@ import { LoginDTO } from '../dtos/admin.dto'
 import { AppInitDTO } from '../dtos/app.dto'
 import { AdminService } from '../services/admin.service'
 
-@Controller('admin/app')
+@Controller('app')
 @ApiTags('app')
 @ApiSecurity('access-token')
 export class AppController {
