@@ -6,14 +6,14 @@ export class Logger implements LoggerService {
   private _logger: log4js.Logger
 
   constructor() {
-    const appender =
-      process.env.NODE_ENV === 'development'
-        ? { type: 'console' }
-        : {
-            type: 'dateFile',
-            filename: 'logs/output.log',
-            compress: true,
-          }
+    const appender = { type: 'console' }
+    // process.env.NODE_ENV === 'development'
+    //   ? { type: 'console' }
+    //   : {
+    //       type: 'dateFile',
+    //       filename: 'logs/output.log',
+    //       compress: true,
+    //     }
 
     log4js.configure({
       appenders: {

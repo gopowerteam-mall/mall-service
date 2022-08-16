@@ -9,7 +9,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { AdminModule } from './modules/admin/admin.module'
 import { WeappModule } from './modules/weapp/weapp.module'
-
+import { join } from 'path'
 /**
  * 配置Swagger
  * @param app
@@ -42,7 +42,9 @@ function setupSwagger(app: NestFastifyApplication) {
       },
     )
 
-    SwaggerModule.setup('admin/docs', app, adminDocument)
+    SwaggerModule.setup('admin/docs', app, adminDocument, {
+      customCssUrl: '/swagger-ui.css',
+    })
 
     // 设置OPENAPI接口地址
     adapter.get('/admin/api-docs', function (req, res) {
@@ -70,7 +72,9 @@ function setupSwagger(app: NestFastifyApplication) {
       },
     )
 
-    SwaggerModule.setup('weapp/docs', app, weappDocument)
+    SwaggerModule.setup('weapp/docs', app, weappDocument, {
+      customCssUrl: '/swagger-ui.css',
+    })
 
     // 设置OPENAPI接口地址
     adapter.get('/weapp/api-docs', function (req, res) {
@@ -100,6 +104,9 @@ async function bootstrap() {
         method: RequestMethod.ALL,
       },
     ],
+  })
+  app.useStaticAssets({
+    root: join(__dirname, '..', 'public'),
   })
 
   // 安装Swagger
