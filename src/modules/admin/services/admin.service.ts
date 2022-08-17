@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
+import { AuthService } from 'src/auth/services/auth.service'
 import { Admin } from 'src/entities/admin.entity'
 import { Repository } from 'typeorm'
-import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class AdminService {
   constructor(
-    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
     @InjectRepository(Admin) private adminRepository: Repository<Admin>,
   ) {}
 
@@ -18,9 +19,8 @@ export class AdminService {
    * @param password
    * @returns
    */
-  public async addAdmin(username: string, password: string) {
-    const saltRounds = this.configService.get<string>('app.saltRounds')
-    const hash = await bcrypt.hash(password, parseInt(saltRounds))
+  public async create(username: string, password: string) {
+    const hash = await this.authService.hashPassword(password)
 
     const admin = this.adminRepository.create({
       username,
@@ -31,14 +31,44 @@ export class AdminService {
   }
 
   /**
-   * 添加管理员
-   * @param username
-   * @param password
+   * 删除管理员
    * @returns
    */
-  public async deleteAdmin(id: string) {
+  public async remove(id: string) {
     const admin = await this.adminRepository.preload({ id })
-    return admin.remove({})
+
+    if (admin) {
+      return admin.remove()
+    }
+  }
+
+  /**
+   * 查找管理员
+   * @returns
+   */
+  findAll() {
+    // 模糊查询支持
+    // TODO: 分页支持
+    return this.adminRepository.find()
+  }
+
+  /**
+   * 获取管理员
+   * @param id
+   * @returns
+   */
+  findOne(id: string) {
+    return this.adminRepository.findOneBy({ id })
+  }
+
+  /**
+   * 更新管理员
+   * @param id
+   * @param updateTestDto
+   * @returns
+   */
+  update(id: string, input: Partial<Admin>) {
+    return this.adminRepository.update(id, input)
   }
 
   /**
@@ -47,10 +77,32 @@ export class AdminService {
    * @param password
    * @returns
    */
-  public async resetAdmin(id: string) {
-    const admin = await this.adminRepository.preload({ id })
-    admin.password = Math.random().toString(36).slice(-6)
-    return admin.save({ reload: true })
+  public async resetAdminPassword(id: string) {
+    // 生成随机密码
+    const password = Math.random().toString(36).slice(-6)
+
+    const hash = await this.authService.hashPassword(password)
+
+    await this.adminRepository.update(id, {
+      password: hash,
+    })
+
+    return password
+  }
+
+  /**
+   * 添加管理员
+   * @param username
+   * @param password
+   * @returns
+   */
+  public async updateAdminPassword(id: string, password: string) {
+    // 生成随机密码
+    const hash = await this.authService.hashPassword(password)
+
+    await this.adminRepository.update(id, {
+      password: hash,
+    })
   }
 
   /**

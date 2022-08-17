@@ -25,6 +25,27 @@ export class AuthService {
   ) {}
 
   /**
+   * 获取密码HASH
+   * @param password
+   * @returns
+   */
+  public async hashPassword(password: string) {
+    const saltRounds = this.config.get<string>('app.saltRounds')
+    const hash = await bcrypt.hash(password, parseInt(saltRounds))
+
+    return hash
+  }
+
+  /**
+   * 比较密码
+   * @param password
+   * @param value
+   */
+  public comparePassword(password1, password2) {
+    return bcrypt.compareSync(password1, password2)
+  }
+
+  /**
    * 管理员登录
    * @param username
    * @param password
@@ -40,7 +61,7 @@ export class AuthService {
       throw new UnauthorizedException('用户不存在')
     }
 
-    if (!bcrypt.compareSync(password, admin.password)) {
+    if (!this.comparePassword(password, admin.password)) {
       throw new UnauthorizedException('用户名或密码错误')
     }
 

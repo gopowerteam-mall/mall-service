@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsUUID, Length } from 'class-validator'
+import { IsOptional, IsString, Length } from 'class-validator'
 
 /**
  * 登录
  */
-export class LoginDTO {
+export class LoginInput {
   @ApiProperty()
   @Length(5, 20)
   username: string
@@ -17,7 +17,7 @@ export class LoginDTO {
 /**
  * 添加管理员
  */
-export class AddAdminDTO {
+export class CreateAdminInput {
   @ApiProperty()
   @Length(5, 20)
   username: string
@@ -28,19 +28,27 @@ export class AddAdminDTO {
 }
 
 /**
- * 删除管理员
+ * 添加管理员
  */
-export class DeleteAdminDTO {
+export class UpdateAdminInput {
   @ApiProperty()
-  @IsUUID()
-  id: string
+  @Length(2, 20)
+  @IsString()
+  @IsOptional()
+  realname: string
 }
 
 /**
- * 充值密码
+ * 添加管理员
  */
-export class ResetPasswordDTO {
+export class UpdatePasswordInput {
   @ApiProperty()
-  @IsUUID()
-  id: string
+  @Length(6, 20)
+  @IsString()
+  oldPassword: string
+
+  @ApiProperty()
+  @Length(6, 20)
+  @IsString()
+  newPassword: string
 }

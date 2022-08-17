@@ -14,7 +14,7 @@ class Admin {
 /**
  * 设置初始化管理员
  */
-export class AppInitDTO {
+export class AppInitInput {
   @ApiProperty()
   admin: Admin
 }

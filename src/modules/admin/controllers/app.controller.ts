@@ -20,8 +20,8 @@ import { AuthService } from 'src/auth/services/auth.service'
 import { Public } from 'src/decorators/public.decorator'
 import { RequestUser } from 'src/decorators/request-user.decorator'
 import { Admin } from 'src/entities/admin.entity'
-import { LoginDTO } from '../dtos/admin.dto'
-import { AppInitDTO } from '../dtos/app.dto'
+import { LoginInput } from '../dtos/admin.dto'
+import { AppInitInput } from '../dtos/app.dto'
 import { AdminService } from '../services/admin.service'
 import { AppBaseResponse, TokenResponse } from '../responses/app.response'
 
@@ -37,7 +37,7 @@ export class AppController {
   @Public()
   @Post('app-init')
   @ApiOperation({ operationId: 'appInit', summary: '系统初始化' })
-  async appInit(@Body() { admin }: AppInitDTO) {
+  async appInit(@Body() { admin }: AppInitInput) {
     const count = await this.adminService.countAdmin()
 
     if (count !== 0) {
@@ -48,7 +48,7 @@ export class AppController {
     }
 
     // 添加初始管理员
-    await this.adminService.addAdmin(admin.username, admin.password)
+    await this.adminService.create(admin.username, admin.password)
   }
 
   @Public()
@@ -82,8 +82,10 @@ export class AppController {
   @UseGuards(PasswordAuthGuard)
   @ApiOperation({ operationId: 'login', summary: '管理员登录' })
   @ApiOkResponse({ type: TokenResponse })
-  login(@RequestUser() admin: Admin, @Body() LoginDTO: LoginDTO) {
-    return this.authService.adminSign(admin)
+  login(@RequestUser() admin: Admin, @Body() loginInput: LoginInput) {
+    if (loginInput.username === admin.username) {
+      return this.authService.adminSign(admin)
+    }
   }
 
   @Public()
@@ -101,7 +103,6 @@ export class AppController {
   @ApiOperation({ operationId: 'getCurrentUser', summary: '获取当前用户信息' })
   @ApiOkResponse({ type: Admin })
   getCurrentUser(@RequestUser() admin: Admin) {
-    console.log(1123123, admin)
     return omit(['password'], admin)
   }
 }
