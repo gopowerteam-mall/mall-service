@@ -18,7 +18,6 @@ export class Admin extends pipe(
   @Column({ unique: true })
   username: string
 
-  @ApiProperty({ description: '密码' })
   @Column()
   password: string
 }

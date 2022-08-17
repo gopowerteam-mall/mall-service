@@ -14,3 +14,8 @@ export class TokenResponse {
   @ApiProperty({ description: 'Token来源' })
   token_origin: TokenOrigin
 }
+
+export class AppBaseResponse {
+  @ApiProperty({ description: '授权Token' })
+  base_time: number
+}

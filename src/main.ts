@@ -94,6 +94,9 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    {
+      cors: true,
+    },
   )
 
   // 安装全局前缀

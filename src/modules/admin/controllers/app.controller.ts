@@ -23,7 +23,7 @@ import { Admin } from 'src/entities/admin.entity'
 import { LoginDTO } from '../dtos/admin.dto'
 import { AppInitDTO } from '../dtos/app.dto'
 import { AdminService } from '../services/admin.service'
-import { TokenResponse } from '../responses/app.response'
+import { AppBaseResponse, TokenResponse } from '../responses/app.response'
 
 @Controller('app')
 @ApiTags('app')
@@ -49,20 +49,22 @@ export class AppController {
 
     // 添加初始管理员
     await this.adminService.addAdmin(admin.username, admin.password)
-
-    return
   }
 
   @Public()
   @Get('app-base')
   @ApiOperation({ operationId: 'appBase', summary: '获取系统基本信息' })
+  @ApiOkResponse({ type: AppBaseResponse })
   async appBase() {
     // 获取系统管理员数量
     const count = await this.adminService.countAdmin()
 
     if (count === 0) {
-      return new HttpException(
-        '系统需要进行初始化配置',
+      throw new HttpException(
+        {
+          message: '系统需要进行初始化配置',
+          ready: false,
+        },
         HttpStatus.EXPECTATION_FAILED,
       )
     }
@@ -70,7 +72,8 @@ export class AppController {
     const basetime = Date.now()
     // TODO: 返回七牛信息
     return {
-      basetime,
+      base_time: basetime,
+      ready: count > 1,
     }
   }
 
@@ -96,6 +99,7 @@ export class AppController {
 
   @Get('current-user')
   @ApiOperation({ operationId: 'getCurrentUser', summary: '获取当前用户信息' })
+  @ApiOkResponse({ type: Admin })
   getCurrentUser(@RequestUser() admin: Admin) {
     console.log(1123123, admin)
     return omit(['password'], admin)
