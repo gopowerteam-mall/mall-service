@@ -19,7 +19,7 @@ export class Admin extends pipe(
   username: string
 
   @ApiProperty({ description: '姓名' })
-  @Column()
+  @Column({ nullable: true })
   realname: string
 
   @Column()
