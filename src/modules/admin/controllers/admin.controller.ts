@@ -70,7 +70,7 @@ export class AdminController {
 
   @Delete(':id')
   @ApiOperation({
-    operationId: 'resetAdminPassword',
+    operationId: 'removeAdmin',
     summary: '删除用户',
   })
   remove(@Param() { id }: IdInput) {
@@ -94,7 +94,7 @@ export class AdminController {
 
   @Patch('update-password/:id')
   @ApiOperation({
-    operationId: 'resetAdminPassword',
+    operationId: 'updateAdminPassword',
     summary: '更新管理员密码',
   })
   async updatePassword(
