@@ -1,5 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsOptional, IsString, Length } from 'class-validator'
+import { Admin } from 'src/entities/admin.entity'
+import { WhereOption } from 'src/shared/typeorm/query/decorators'
+import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 
 /**
  * 登录
@@ -51,4 +54,16 @@ export class UpdatePasswordInput {
   @Length(6, 20)
   @IsString()
   newPassword: string
+}
+
+export class FindAdminInput extends QueryInput<Admin> {
+  @ApiProperty({ required: false, description: '姓名(模糊查询)' })
+  @IsOptional()
+  @WhereOption({ type: 'like' })
+  realname?: string
+
+  @ApiProperty({ required: false, description: '用户名(模糊查询)' })
+  @IsOptional()
+  @WhereOption({ type: 'like' })
+  username?: string
 }

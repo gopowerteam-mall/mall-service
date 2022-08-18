@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common'
 import {
   ApiOkResponse,
@@ -24,6 +25,7 @@ import {
   CreateAdminInput,
   UpdatePasswordInput,
   UpdateAdminInput,
+  FindAdminInput,
 } from '../dtos/admin.dto'
 import { AdminResetPasswordResponse } from '../responses/admin.response'
 import { AdminService } from '../services/admin.service'
@@ -55,10 +57,10 @@ export class AdminController {
   }
 
   @Get()
-  @ApiOperation({ operationId: 'findAdmin', summary: '查询管理员' })
+  @ApiOperation({ operationId: 'findAdmin', summary: '查询管理员列表' })
   @ApiOkResponse({ type: Admin, isArray: true })
-  findAll() {
-    return this.adminService.findAll()
+  findAll(@Query() input: FindAdminInput) {
+    return this.adminService.findAll(input.params)
   }
 
   @Get(':id')

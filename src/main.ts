@@ -1,4 +1,4 @@
-import { RequestMethod } from '@nestjs/common'
+import { RequestMethod, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import {
@@ -108,6 +108,15 @@ async function bootstrap() {
       },
     ],
   })
+
+  // 安装验证管道
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
   })

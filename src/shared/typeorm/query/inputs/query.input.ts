@@ -1,15 +1,15 @@
-import { Between, In, Like } from 'typeorm'
-import { PageParams } from './page-params'
+import { Between, FindOptionsWhere, In, Like } from 'typeorm'
 import {
   WHERE_OPTION_METADATA,
   WHERE_OPTION_TYPE_METADATA,
 } from 'src/config/constants'
+import { PageParams } from '../params/page-params'
 
-export class QueryInput {
+export class QueryInput<T = any> {
   /**
    * 获取查询参数
    */
-  public get queryParams() {
+  public get whereParams(): FindOptionsWhere<T> {
     const params = Object.getOwnPropertyNames(this)
       .filter((key) => Reflect.getMetadata(WHERE_OPTION_METADATA, this, key))
       .filter((key: string) => this[key] !== undefined)
@@ -41,5 +41,16 @@ export class QueryInput {
    */
   public get sortParams() {
     return {}
+  }
+
+  /**
+   * 获取所有参数
+   */
+  public get params() {
+    return {
+      where: this.whereParams,
+      page: this.pageParams,
+      sort: this.sortParams,
+    }
   }
 }

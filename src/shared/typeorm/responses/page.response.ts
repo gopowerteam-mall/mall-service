@@ -1,6 +1,6 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { BaseEntity } from 'typeorm'
-import { PageParams } from '../query/page-params'
+import { PageParams } from '../query/params/page-params'
 
 export const PageResponse = (entity: new (...args: any[]) => BaseEntity) => {
   return {
