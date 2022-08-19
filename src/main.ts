@@ -10,6 +10,7 @@ import { AppModule } from './app.module'
 import { AdminModule } from './modules/admin/admin.module'
 import { WeappModule } from './modules/weapp/weapp.module'
 import { join } from 'path'
+import { QiniuModule } from './modules/qiniu/qiniu.module'
 /**
  * 配置Swagger
  * @param app
@@ -38,7 +39,7 @@ function setupSwagger(app: NestFastifyApplication) {
       app,
       adminDocumentConfig,
       {
-        include: [AdminModule],
+        include: [AdminModule, QiniuModule],
       },
     )
 
@@ -68,7 +69,7 @@ function setupSwagger(app: NestFastifyApplication) {
       app,
       weappDocumentConfig,
       {
-        include: [WeappModule],
+        include: [WeappModule, QiniuModule],
       },
     )
 

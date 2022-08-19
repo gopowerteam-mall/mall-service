@@ -9,6 +9,7 @@ import { WeappModule } from './modules/weapp/weapp.module'
 import { AdminModule } from './modules/admin/admin.module'
 import configuration from './config/configuration'
 import { RouterModule } from '@nestjs/core'
+import { QiniuModule } from './modules/qiniu/qiniu.module'
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RouterModule } from '@nestjs/core'
     LoggerModule,
     WeappModule,
     AdminModule,
+    QiniuModule,
     RouterModule.register([
       {
         path: 'admin',

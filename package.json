@@ -45,6 +45,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",
+    "qiniu": "^7.7.0",
     "ramda": "^0.28.0",
     "redis": "^4.2.0",
     "reflect-metadata": "0.1.13",
