@@ -22,7 +22,7 @@ export const PageResponse = (entity: new (...args: any[]) => BaseEntity) => {
 
 export class Pageable<T> {
   @ApiProperty()
-  public pageNumber: number
+  public pageIndex: number
 
   @ApiProperty()
   public pageSize: number
@@ -35,7 +35,7 @@ export class Pageable<T> {
   constructor(data: T[], count: number, page: PageParams) {
     this.content = data
     this.totalElements = count
-    this.pageNumber = page.page
+    this.pageIndex = page.page
     this.pageSize = page.size
   }
 }

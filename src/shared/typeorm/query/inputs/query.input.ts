@@ -18,10 +18,13 @@ export class QueryInput<T = any> {
         switch (type) {
           case 'in':
             result[key] = In(this[key])
+            break
           case 'like':
             result[key] = Like(`%${this[key]}%`)
+            break
           case 'between':
             result[key] = Between(this[key][0], this[key][1])
+            break
         }
         return result
       }, {})
@@ -39,7 +42,7 @@ export class QueryInput<T = any> {
   /**
    * 获取排序参数
    */
-  public get sortParams() {
+  public get orderParams() {
     return {}
   }
 
@@ -50,7 +53,7 @@ export class QueryInput<T = any> {
     return {
       where: this.whereParams,
       page: this.pageParams,
-      sort: this.sortParams,
+      order: this.orderParams,
     }
   }
 }

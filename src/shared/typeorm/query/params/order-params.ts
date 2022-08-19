@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class SortParams {
+export class OrderParams {
   @ApiProperty()
-  public sort: number
+  public Order: number
 }

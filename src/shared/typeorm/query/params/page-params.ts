@@ -21,4 +21,12 @@ export class PageParams {
       skip: this.page * this.size,
     }
   }
+
+  public get take() {
+    return this.size
+  }
+
+  public get skip() {
+    return this.page * this.size
+  }
 }

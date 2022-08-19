@@ -118,7 +118,8 @@ export class AuthService {
     }
 
     const accessTokenExpiresIn = 60 * 60 * 1
-    const refreshTokenExpiresIn = 60 * 60 * 7
+    const refreshTokenExpiresIn = 60 * 60 * 24 * 7
+
     // 获取AccessToken
     const accessToken = this.jwtService.sign(payload, {
       secret: this.config.get('jwt.accessTokenSecret'),

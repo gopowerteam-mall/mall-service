@@ -73,7 +73,7 @@ export class AppController {
     // TODO: 返回七牛信息
     return {
       base_time: basetime,
-      ready: count > 1,
+      ready: count > 0,
     }
   }
 

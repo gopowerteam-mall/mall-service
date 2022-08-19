@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AuthService } from 'src/auth/services/auth.service'
 import { Admin } from 'src/entities/admin.entity'
-import { QueryInputParam } from 'src/shared/typeorm/query/interfaces'
+import { QueryInputParam } from 'src/shared/typeorm/interfaces'
+import { QueryExtends } from 'src/shared/typeorm/query/extends'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -48,10 +49,15 @@ export class AdminService {
    * @returns
    */
   findAll(params?: QueryInputParam<Admin>) {
-    // TODO: 分页支持
-    return this.adminRepository.find({
-      where: params.where,
-    })
+    return this.adminRepository.extend(QueryExtends).pagination(
+      {
+        where: params?.where,
+        order: params.order,
+      },
+      {
+        page: params.page,
+      },
+    )
   }
 
   /**
