@@ -24,12 +24,14 @@ import { LoginInput } from '../dtos/admin.dto'
 import { AppInitInput } from '../dtos/app.dto'
 import { AdminService } from '../services/admin.service'
 import { AppBaseResponse, TokenResponse } from '../responses/app.response'
+import { ConfigService } from '@nestjs/config'
 
 @Controller('app')
 @ApiTags('app')
 @ApiSecurity('access-token')
 export class AppController {
   constructor(
+    private readonly config: ConfigService,
     private readonly authService: AuthService,
     private readonly adminService: AdminService,
   ) {}
@@ -73,6 +75,9 @@ export class AppController {
     // TODO: 返回七牛信息
     return {
       base_time: basetime,
+      qiniu: {
+        domain: this.config.get('qiniu.storage.main.domain'),
+      },
       ready: count > 0,
     }
   }

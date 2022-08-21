@@ -1,5 +1,11 @@
 import { Controller, Get } from '@nestjs/common'
-import { ApiOperation, ApiSecurity, ApiTags } from '@nestjs/swagger'
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger'
+import { GetUploadTokenResponse } from '../responses/qiniu.response'
 import { TokenService } from '../services/token.service'
 
 @ApiTags('qiniu')
@@ -11,7 +17,10 @@ export class QiniuController {
   @ApiOperation({ operationId: 'getUploadToken', description: '获取存储Token' })
   @Get('upload-token')
   @ApiSecurity('access-token')
-  getUploadToken() {
-    return this.tokenService.getUploadToken()
+  @ApiOkResponse({ type: GetUploadTokenResponse })
+  getUploadToken(): GetUploadTokenResponse {
+    return {
+      token: this.tokenService.getUploadToken(),
+    }
   }
 }

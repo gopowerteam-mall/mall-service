@@ -15,7 +15,17 @@ export class TokenResponse {
   token_origin: TokenOrigin
 }
 
+class QiniuConfig {
+  @ApiProperty({ description: '域名' })
+  domain: string
+}
+
 export class AppBaseResponse {
   @ApiProperty({ description: '授权Token' })
   base_time: number
+
+  @ApiProperty({
+    description: '七牛配置',
+  })
+  qiniu: QiniuConfig
 }

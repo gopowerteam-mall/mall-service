@@ -25,11 +25,11 @@ export default () => ({
     storage: {
       main: {
         bucket: process.env.QINIU_MAIN_BUCKET,
-        domin: process.env.QINIU_MAIN_DOMAIN,
+        domain: process.env.QINIU_MAIN_DOMAIN,
       },
       temp: {
         bucket: process.env.QINIU_TEMP_BUCKET,
-        domin: process.env.QINIU_TEMP_DOMAIN,
+        domain: process.env.QINIU_TEMP_DOMAIN,
       },
     },
     accessKey: process.env.QINIU_ACCESS_KEY,
