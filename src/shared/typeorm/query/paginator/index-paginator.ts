@@ -1,9 +1,9 @@
+import { PaginatorMode } from 'src/config/enum.config'
 import { ObjectType, SelectQueryBuilder } from 'typeorm'
-import { PaginatorMode } from '.'
 
 export interface IndexPagingQuery {
-  index?: number
-  size?: number
+  skip: number
+  limit: number
   order?: 'ASC' | 'DESC'
 }
 
@@ -23,8 +23,22 @@ export interface PagingResult<Entity> {
  */
 export class IndexPaginator<Entity> {
   private limit = 20
+  private skip = 0
+  private order: string
 
   public constructor(private entity: ObjectType<Entity>) {}
+
+  public setLimit(limit: number) {
+    this.limit = limit
+  }
+
+  public setSkip(skip: number) {
+    this.skip = skip
+  }
+
+  public setOrder(order: string) {
+    this.order = order
+  }
 
   public async paginate(
     builder: SelectQueryBuilder<Entity>,
@@ -42,8 +56,11 @@ export class IndexPaginator<Entity> {
     const queryBuilder = new SelectQueryBuilder<Entity>(builder)
 
     queryBuilder.take(this.limit)
-    //     queryBuilder.orderBy(this.buildOrder())
 
+    queryBuilder.skip(this.skip)
+
+    // TODO: ORDER
+    // queryBuilder.orderBy()
     return queryBuilder
   }
 

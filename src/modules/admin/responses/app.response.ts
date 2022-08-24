@@ -1,4 +1,4 @@
-import { TokenOrigin } from 'src/config/enum.config'
+import { JWTOrigin } from 'src/config/enum.config'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class TokenResponse {
@@ -12,7 +12,7 @@ export class TokenResponse {
   expires_in: number
 
   @ApiProperty({ description: 'Token来源' })
-  token_origin: TokenOrigin
+  token_origin: JWTOrigin
 }
 
 class QiniuConfig {

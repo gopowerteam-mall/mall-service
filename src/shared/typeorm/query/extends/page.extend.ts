@@ -19,6 +19,7 @@ export default {
     } = {},
   ): Promise<Pageable<T> | T[]> {
     if (page) {
+      // TODO:添加游标支持
       // 进行分页查找
       const [data, count] = await this.findAndCount({
         ...options,

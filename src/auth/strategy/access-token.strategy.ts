@@ -2,14 +2,14 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { TokenOrigin } from 'src/config/enum.config'
+import { JWTOrigin } from 'src/config/enum.config'
 import { AuthService } from '../services/auth.service'
 
 type JwtPayload = {
   id: string
   username?: string
   openid?: string
-  origin: TokenOrigin
+  origin: JWTOrigin
 }
 
 @Injectable()
@@ -36,9 +36,9 @@ export class AccessTokenStrategy extends PassportStrategy(
   async validate(payload: JwtPayload) {
     const getTargetUser = () => {
       switch (payload.origin) {
-        case TokenOrigin.Admin:
+        case JWTOrigin.Admin:
           return this.authService.getAdminUser(payload.id, payload.username)
-        case TokenOrigin.Weapp:
+        case JWTOrigin.Weapp:
           return this.authService.getWeappUser(payload.id, payload.username)
       }
     }
