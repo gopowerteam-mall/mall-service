@@ -1,26 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger'
-
 export class CursorParams {
-  @ApiProperty()
   public cursor: string
-
-  @ApiProperty()
   public size: number
+  public cursorKey: string
+  public orderKey: string
 
   #defaultSize = 10
 
-  constructor(cursor: string, size: number) {
+  constructor(
+    cursor: string,
+    size: number,
+    cursorKey: string,
+    orderKey: string,
+  ) {
     this.cursor = cursor
     this.size = size || this.#defaultSize
+    this.cursorKey = cursorKey || 'id'
+    this.orderKey = orderKey || 'createdAt'
   }
 
-  public get params() {
-    return {
-      take: this.size,
-    }
-  }
-
-  public get take() {
+  public get limit() {
     return this.size
   }
 }

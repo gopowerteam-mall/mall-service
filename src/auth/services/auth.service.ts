@@ -11,7 +11,7 @@ import { User } from 'src/entities/user.entity'
 import { Repository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
-import { TokenOrigin } from 'src/config/enum.config'
+import { JWTOrigin } from 'src/config/enum.config'
 import { Cache } from 'cache-manager'
 
 @Injectable()
@@ -109,12 +109,12 @@ export class AuthService {
    * @returns
    */
   async adminSign(admin: Admin) {
-    const tokenOrigin = TokenOrigin.Admin
+    const jwtOrigin = JWTOrigin.Admin
 
     const payload = {
       username: admin.username,
       id: admin.id,
-      origin: tokenOrigin,
+      origin: jwtOrigin,
     }
 
     const accessTokenExpiresIn = 60 * 60 * 1
@@ -142,7 +142,7 @@ export class AuthService {
       access_token: accessToken,
       refresh_token: refreshToken,
       expires_in: accessTokenExpiresIn,
-      token_origin: tokenOrigin,
+      token_origin: jwtOrigin,
     }
   }
 }

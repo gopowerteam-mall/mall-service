@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AuthService } from 'src/auth/services/auth.service'
+import { PaginatorMode } from 'src/config/enum.config'
 import { Admin } from 'src/entities/admin.entity'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
-import { QueryExtends } from 'src/shared/typeorm/query/extends'
+import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -48,16 +49,22 @@ export class AdminService {
    * 查找管理员
    * @returns
    */
-  findAll(params?: QueryInputParam<Admin>) {
-    return this.adminRepository.extend(QueryExtends).pagination(
-      {
-        where: params?.where,
-        order: params.order,
+  findAll({ buildWhereQuery, page, order }: QueryInputParam<Admin>) {
+    const builder = this.adminRepository.createQueryBuilder('admin')
+
+    builder.andWhere(buildWhereQuery())
+
+    const paginator = buildPaginator({
+      mode: PaginatorMode.index,
+      entity: Admin,
+      query: {
+        order: order,
+        skip: page.skip,
+        limit: page.limit,
       },
-      {
-        page: params.page,
-      },
-    )
+    })
+
+    return paginator.paginate(builder)
   }
 
   /**

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { CreateDateColumn, Timestamp, UpdateDateColumn } from 'typeorm'
+import { CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { Constructor } from '.'
 
 /**
@@ -11,11 +11,11 @@ import { Constructor } from '.'
  */
 export function EntityWithTime<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
-    @CreateDateColumn()
+    @CreateDateColumn({ name: 'created_at' })
     @ApiProperty({ description: '创建日期', type: 'string' })
     public createdAt: Date
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ name: 'updated_at' })
     @ApiProperty({ description: '更新日期', type: 'string' })
     public updatedAt: Date
   }

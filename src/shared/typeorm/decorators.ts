@@ -3,14 +3,18 @@ import {
   WHERE_OPTION_METADATA,
   WHERE_OPTION_TYPE_METADATA,
 } from 'src/config/constants'
+import { WhereOperator } from 'src/config/enum.config'
 
 export type WhereOption = {
-  type?: 'in' | 'like' | 'equal' | 'between'
+  type?: WhereOperator
 }
 
 export function WhereOption(option: WhereOption) {
   return applyDecorators(
     Reflect.metadata(WHERE_OPTION_METADATA, true),
-    Reflect.metadata(WHERE_OPTION_TYPE_METADATA, option.type || 'equal'),
+    Reflect.metadata(
+      WHERE_OPTION_TYPE_METADATA,
+      option.type || WhereOperator.Equal,
+    ),
   )
 }
