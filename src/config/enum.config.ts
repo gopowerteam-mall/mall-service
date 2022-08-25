@@ -11,6 +11,13 @@ export enum Order {
   DESC = 'DESC',
 }
 
+export enum WhereOperator {
+  In = 'IN',
+  Like = 'LIKE',
+  Equal = 'EQUAL',
+  Between = 'BETWEEN',
+}
+
 /**
  * 管理员角色
  */

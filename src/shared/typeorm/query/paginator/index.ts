@@ -27,8 +27,8 @@ export function buildPaginator<Entity>(
   const builderCursorPaginator = (options: CursorPaginationOptions<Entity>) => {
     const paginator = new CursorPaginator(
       options.entity,
-      options.paginationCursorKey,
-      options.paginationOrderKey,
+      options.cursorKey,
+      options.orderKey,
     )
 
     paginator.setLimit(options?.query?.limit)

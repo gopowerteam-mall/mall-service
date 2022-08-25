@@ -1,10 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger'
-
 export class PageParams {
-  @ApiProperty()
   public page: number
-
-  @ApiProperty()
   public size: number
 
   #defaultPage = 0
@@ -22,7 +17,7 @@ export class PageParams {
     }
   }
 
-  public get take() {
+  public get limit() {
     return this.size
   }
 

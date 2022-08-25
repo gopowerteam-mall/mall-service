@@ -5,7 +5,6 @@ import { AuthService } from 'src/auth/services/auth.service'
 import { PaginatorMode } from 'src/config/enum.config'
 import { Admin } from 'src/entities/admin.entity'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
-import { QueryExtends } from 'src/shared/typeorm/query/extends'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { Repository } from 'typeorm'
 
@@ -50,30 +49,22 @@ export class AdminService {
    * 查找管理员
    * @returns
    */
-  findAll(params?: QueryInputParam<Admin>) {
+  findAll({ buildWhereQuery, page, order }: QueryInputParam<Admin>) {
     const builder = this.adminRepository.createQueryBuilder('admin')
 
+    builder.andWhere(buildWhereQuery())
+
     const paginator = buildPaginator({
-      mode: PaginatorMode.cursor,
+      mode: PaginatorMode.index,
       entity: Admin,
       query: {
-        limit: params.page.take,
+        order: order,
+        skip: page.skip,
+        limit: page.limit,
       },
     })
 
     return paginator.paginate(builder)
-
-    // return paginator.paginate(builder)
-
-    // return this.adminRepository.extend(QueryExtends).pagination(
-    //   {
-    //     where: params?.where,
-    //     order: params.order,
-    //   },
-    //   {
-    //     page: params.page,
-    //   },
-    // )
   }
 
   /**

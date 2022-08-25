@@ -1,4 +1,5 @@
 import { Order, PaginatorMode } from 'src/config/enum.config'
+import { toUnderscore } from 'src/shared/common'
 import {
   Brackets,
   ObjectType,
@@ -8,16 +9,16 @@ import {
 
 export interface CursorPagingQuery {
   cursor?: string
-  limit: number
-  order?: Order
+  limit?: number
+  order?: Record<string, Order>
 }
 
 export interface CursorPaginationOptions<Entity> {
   entity: ObjectType<Entity>
   mode: PaginatorMode.cursor
   query?: CursorPagingQuery
-  paginationCursorKey?: Extract<keyof Entity, string>
-  paginationOrderKey?: Extract<keyof Entity, string>
+  cursorKey?: string
+  orderKey?: string
 }
 
 export interface PagingResult<Entity> {
@@ -26,39 +27,26 @@ export interface PagingResult<Entity> {
   finished: boolean
 }
 
-function camelOrPascalToUnderscore(str: string) {
-  return str
-    .split(/(?=[A-Z])/)
-    .join('_')
-    .toLowerCase()
-}
-
 export class CursorPaginator<Entity> {
   private cursor?: string
 
-  private alias: string = camelOrPascalToUnderscore(this.entity.name)
+  private alias: string = toUnderscore(this.entity.name)
 
   private limit = 10
 
-  private order: Order = Order.DESC
+  private order: Record<string, Order>
 
   public constructor(
     private entity: ObjectType<Entity>,
-    private paginationCursorKey: Extract<
-      keyof Entity,
-      string
-    > = 'id' as Extract<keyof Entity, string>,
-    private paginationOrderKey: Extract<
-      keyof Entity,
-      string
-    > = 'created_at' as Extract<keyof Entity, string>,
+    private cursorKey: string = 'id',
+    private orderKey: string = 'created_at',
   ) {}
 
   public setLimit(limit: number): void {
     this.limit = limit
   }
 
-  public setOrder(order: Order): void {
+  public setOrder(order: Record<string, Order>): void {
     this.order = order
   }
 
@@ -98,16 +86,34 @@ export class CursorPaginator<Entity> {
     if (this.cursor) {
       queryBuilder.andWhere(
         new Brackets((where) =>
-          this.buildCursorQuery(this.cursor, where, builder),
+          this.buildCursorQuery(this.cursor, where, queryBuilder),
         ),
       )
     }
 
     // 使用limit + 1来确认数据是否结束
     queryBuilder.take(this.limit + 1)
-    queryBuilder.orderBy(`${this.alias}.${this.paginationOrderKey}`, this.order)
 
-    return queryBuilder
+    return this.appendOrderQuery(queryBuilder)
+  }
+
+  /**
+   * 添加order语句
+   * @param builder
+   * @returns
+   */
+  private appendOrderQuery(
+    builder: SelectQueryBuilder<Entity>,
+  ): SelectQueryBuilder<Entity> {
+    const order = this.order || {
+      [this.orderKey]: Order.DESC,
+    }
+
+    Object.entries(order).forEach(([key, order]) => {
+      builder.addOrderBy(`${this.alias}.${key}`, order)
+    })
+
+    return builder
   }
 
   /**
@@ -122,25 +128,28 @@ export class CursorPaginator<Entity> {
     where: WhereExpressionBuilder,
     builder: SelectQueryBuilder<Entity>,
   ): void {
-    console.log(this.cursor)
     if (!this.cursor) {
       return
     }
 
-    // TODO：使用ALIAS
+    // 查询游标位置
     const cursorQuery = builder
-      .select(`${this.alias}.${this.paginationOrderKey}`)
-      .where(
-        `${this.alias}.${
-          this.paginationCursorKey
-        } ${this.getOperator()} :paginationCursorKey`,
-        {
-          paginationCursorKey: cursor,
-        },
-      )
+      .subQuery()
+      .from(this.entity, this.alias)
+      .select(`${this.alias}.${this.orderKey}`)
+      .where(`${this.alias}.${this.cursorKey} = :cursorKey`, {
+        cursorKey: cursor,
+      })
       .getQuery()
 
-    where.andWhere(`${this.alias}.${this.paginationCursorKey} > ${cursorQuery}`)
+    // 设置游标参数
+    builder.setParameters({
+      cursorKey: cursor,
+    })
+
+    where.andWhere(
+      `${this.alias}.${this.orderKey} ${this.getOperator()} (${cursorQuery})`,
+    )
   }
 
   /**
@@ -148,7 +157,15 @@ export class CursorPaginator<Entity> {
    * @returns
    */
   private getOperator(): string {
-    return this.order === Order.ASC ? '<' : '>'
+    switch ((this.order || {})?.[this.orderKey]) {
+      case Order.ASC:
+        return '>'
+      case Order.DESC:
+        return '<'
+      // 默认处理
+      default:
+        return '>'
+    }
   }
 
   /**
@@ -164,7 +181,7 @@ export class CursorPaginator<Entity> {
 
     return {
       data: entities,
-      cursor: last?.[this.paginationCursorKey as string],
+      cursor: last?.[this.cursorKey as string],
       finished,
     }
   }
