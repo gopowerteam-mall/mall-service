@@ -1,6 +1,6 @@
 import { Optional } from '@nestjs/common'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { IsUUID } from 'class-validator'
+import { IsEnum, IsUUID } from 'class-validator'
 import { BannerType, WhereOperator } from 'src/config/enum.config'
 import { Banner } from 'src/entities/banner.entity'
 import { WhereOption } from 'src/shared/typeorm/decorators'
@@ -18,6 +18,7 @@ export class CreateBannerInput {
   image: string
 
   @ApiProperty({ description: 'Banner类型', enum: BannerType })
+  @IsEnum(BannerType)
   type: BannerType
 
   @ApiProperty({ description: '参数' })
