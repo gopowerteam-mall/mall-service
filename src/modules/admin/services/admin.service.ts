@@ -55,7 +55,7 @@ export class AdminService {
     builder.andWhere(buildWhereQuery())
 
     const paginator = buildPaginator({
-      mode: PaginatorMode.index,
+      mode: PaginatorMode.Index,
       entity: Admin,
       query: {
         order: order,

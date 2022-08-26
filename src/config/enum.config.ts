@@ -2,8 +2,8 @@
  * 分页类型
  */
 export enum PaginatorMode {
-  cursor = 'Cursor',
-  index = 'Index',
+  Cursor = 'CURSOR',
+  Index = 'INDEX',
 }
 
 export enum Order {
@@ -32,4 +32,13 @@ export enum AdminRole {
 export enum JWTOrigin {
   Admin = 'admin',
   Weapp = 'weapp',
+}
+
+/**
+ * Banner类型
+ */
+export enum BannerType {
+  URL = 'URL',
+  Page = 'PAGE',
+  Project = 'PROJECT',
 }

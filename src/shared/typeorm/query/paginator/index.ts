@@ -39,9 +39,9 @@ export function buildPaginator<Entity>(
   }
 
   switch (options.mode) {
-    case PaginatorMode.cursor:
+    case PaginatorMode.Cursor:
       return builderCursorPaginator(options)
-    case PaginatorMode.index:
+    case PaginatorMode.Index:
       return builderIndexPaginator(options)
   }
 }

@@ -25,13 +25,35 @@ export class FileService {
     )
   }
 
+  public listFile(bucket: string, prefix: string) {
+    const bucketManager = this.getBucketManager()
+
+    return new Promise<any[]>((resolve) =>
+      bucketManager.listPrefix(bucket, { prefix }, (_, files) => {
+        return resolve(files.items)
+      }),
+    )
+  }
+
   /**
    * 保存文件
    * @param key
    */
-  public save(key: string) {
+  public async save(key: string) {
     const tempBucket = this.config.get('qiniu.storage.temp.bucket')
     const mainBucket = this.config.get('qiniu.storage.main.bucket')
+
+    const [mainFile] = await this.listFile(tempBucket, key)
+    const [tempFile] = await this.listFile(mainBucket, key)
+
+    if (!mainFile && !tempFile) {
+      throw new Error('无法找到需要保存的文件')
+    }
+
+    if (!mainFile) {
+      // 文件已存在
+      return
+    }
 
     const bucketManager = this.getBucketManager()
 

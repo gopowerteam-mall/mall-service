@@ -9,7 +9,7 @@ export interface IndexPagingQuery {
 }
 
 export interface IndexPaginationOptions<Entity> {
-  mode: PaginatorMode.index
+  mode: PaginatorMode.Index
   entity: ObjectType<Entity>
   query?: IndexPagingQuery
 }

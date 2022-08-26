@@ -15,7 +15,7 @@ export interface CursorPagingQuery {
 
 export interface CursorPaginationOptions<Entity> {
   entity: ObjectType<Entity>
-  mode: PaginatorMode.cursor
+  mode: PaginatorMode.Cursor
   query?: CursorPagingQuery
   cursorKey?: string
   orderKey?: string

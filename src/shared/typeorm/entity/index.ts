@@ -19,5 +19,6 @@ export type Constructor<T = EntityClass> = new (...args: any[]) => T
 export * from './entity-with-enable'
 export * from './entity-with-id'
 export * from './entity-with-uuid'
-export * from './entity-with-timestamp'
-export * from './entity-with-soft-delete'
+export * from './entity-with-time'
+export * from './entity-with-delete'
+export * from './entity-with-sort'
