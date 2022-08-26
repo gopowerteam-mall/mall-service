@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 import { JwtModule } from '@nestjs/jwt'
-import { ConfigModule, ConfigService } from '@nestjs/config'
 import { PasswordStrategy } from './strategy/password.strategy'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Admin } from 'src/entities/admin.entity'
+import { Administrator } from 'src/entities/administrator.entity'
 import { User } from 'src/entities/user.entity'
 import { AuthService } from './services/auth.service'
 import { AccessTokenStrategy } from './strategy/access-token.strategy'
@@ -16,7 +15,7 @@ import { AccessTokenAuthGuard } from './guards/access-token.guard'
   imports: [
     PassportModule,
     JwtModule.register({}),
-    TypeOrmModule.forFeature([Admin, User]),
+    TypeOrmModule.forFeature([Administrator, User]),
   ],
   providers: [
     PasswordStrategy,

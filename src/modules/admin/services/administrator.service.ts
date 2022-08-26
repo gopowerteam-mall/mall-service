@@ -3,17 +3,18 @@ import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AuthService } from 'src/auth/services/auth.service'
 import { PaginatorMode } from 'src/config/enum.config'
-import { Admin } from 'src/entities/admin.entity'
+import { Administrator } from 'src/entities/administrator.entity'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { Repository } from 'typeorm'
 
 @Injectable()
-export class AdminService {
+export class AdministratorService {
   constructor(
     private readonly authService: AuthService,
     private readonly config: ConfigService,
-    @InjectRepository(Admin) private adminRepository: Repository<Admin>,
+    @InjectRepository(Administrator)
+    private administratorRepository: Repository<Administrator>,
   ) {}
 
   /**
@@ -25,12 +26,12 @@ export class AdminService {
   public async create(username: string, password: string) {
     const hash = await this.authService.hashPassword(password)
 
-    const admin = this.adminRepository.create({
+    const administrator = this.administratorRepository.create({
       username,
       password: hash,
     })
 
-    return admin.save({ reload: true })
+    return administrator.save({ reload: true })
   }
 
   /**
@@ -38,10 +39,10 @@ export class AdminService {
    * @returns
    */
   public async remove(id: string) {
-    const admin = await this.adminRepository.preload({ id })
+    const administrator = await this.administratorRepository.preload({ id })
 
-    if (admin) {
-      return admin.remove()
+    if (administrator) {
+      return administrator.remove()
     }
   }
 
@@ -49,14 +50,15 @@ export class AdminService {
    * 查找管理员
    * @returns
    */
-  findAll({ buildWhereQuery, page, order }: QueryInputParam<Admin>) {
-    const builder = this.adminRepository.createQueryBuilder('admin')
+  findAll({ buildWhereQuery, page, order }: QueryInputParam<Administrator>) {
+    const builder =
+      this.administratorRepository.createQueryBuilder('administrator')
 
     builder.andWhere(buildWhereQuery())
 
     const paginator = buildPaginator({
       mode: PaginatorMode.Index,
-      entity: Admin,
+      entity: Administrator,
       query: {
         order: order,
         skip: page.skip,
@@ -73,7 +75,7 @@ export class AdminService {
    * @returns
    */
   findOne(id: string) {
-    return this.adminRepository.findOneBy({ id })
+    return this.administratorRepository.findOneBy({ id })
   }
 
   /**
@@ -82,8 +84,8 @@ export class AdminService {
    * @param updateTestDto
    * @returns
    */
-  update(id: string, input: Partial<Admin>) {
-    return this.adminRepository.update(id, input)
+  update(id: string, input: Partial<Administrator>) {
+    return this.administratorRepository.update(id, input)
   }
 
   /**
@@ -92,13 +94,13 @@ export class AdminService {
    * @param password
    * @returns
    */
-  public async resetAdminPassword(id: string) {
+  public async resetAdministratorPassword(id: string) {
     // 生成随机密码
     const password = Math.random().toString(36).slice(-6)
 
     const hash = await this.authService.hashPassword(password)
 
-    await this.adminRepository.update(id, {
+    await this.administratorRepository.update(id, {
       password: hash,
     })
 
@@ -111,11 +113,11 @@ export class AdminService {
    * @param password
    * @returns
    */
-  public async updateAdminPassword(id: string, password: string) {
+  public async updateAdministratorPassword(id: string, password: string) {
     // 生成随机密码
     const hash = await this.authService.hashPassword(password)
 
-    await this.adminRepository.update(id, {
+    await this.administratorRepository.update(id, {
       password: hash,
     })
   }
@@ -126,7 +128,7 @@ export class AdminService {
    * @param password
    * @returns
    */
-  public async countAdmin() {
-    return await this.adminRepository.count()
+  public async countAdministrator() {
+    return await this.administratorRepository.count()
   }
 }

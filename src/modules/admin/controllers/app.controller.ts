@@ -19,10 +19,10 @@ import { RefreshTokenGuard } from 'src/auth/guards/refresh-token.guard'
 import { AuthService } from 'src/auth/services/auth.service'
 import { Public } from 'src/decorators/public.decorator'
 import { RequestUser } from 'src/decorators/request-user.decorator'
-import { Admin } from 'src/entities/admin.entity'
-import { LoginInput } from '../dtos/admin.dto'
+import { Administrator } from 'src/entities/administrator.entity'
+import { LoginInput } from '../dtos/administrator.dto'
 import { AppInitInput } from '../dtos/app.dto'
-import { AdminService } from '../services/admin.service'
+import { AdministratorService } from '../services/administrator.service'
 import { AppBaseResponse, TokenResponse } from '../responses/app.response'
 import { ConfigService } from '@nestjs/config'
 
@@ -33,14 +33,14 @@ export class AppController {
   constructor(
     private readonly config: ConfigService,
     private readonly authService: AuthService,
-    private readonly adminService: AdminService,
+    private readonly administratorService: AdministratorService,
   ) {}
 
   @Public()
   @Post('app-init')
   @ApiOperation({ operationId: 'appInit', summary: '系统初始化' })
-  async appInit(@Body() { admin }: AppInitInput) {
-    const count = await this.adminService.countAdmin()
+  async appInit(@Body() { administrator }: AppInitInput) {
+    const count = await this.administratorService.countAdministrator()
 
     if (count !== 0) {
       return new HttpException(
@@ -50,7 +50,10 @@ export class AppController {
     }
 
     // 添加初始管理员
-    await this.adminService.create(admin.username, admin.password)
+    await this.administratorService.create(
+      administrator.username,
+      administrator.password,
+    )
   }
 
   @Public()
@@ -59,7 +62,7 @@ export class AppController {
   @ApiOkResponse({ type: AppBaseResponse })
   async appBase() {
     // 获取系统管理员数量
-    const count = await this.adminService.countAdmin()
+    const count = await this.administratorService.countAdministrator()
 
     if (count === 0) {
       throw new HttpException(
@@ -87,9 +90,12 @@ export class AppController {
   @UseGuards(PasswordAuthGuard)
   @ApiOperation({ operationId: 'login', summary: '管理员登录' })
   @ApiOkResponse({ type: TokenResponse })
-  login(@RequestUser() admin: Admin, @Body() loginInput: LoginInput) {
-    if (loginInput.username === admin.username) {
-      return this.authService.adminSign(admin)
+  login(
+    @RequestUser() administrator: Administrator,
+    @Body() loginInput: LoginInput,
+  ) {
+    if (loginInput.username === administrator.username) {
+      return this.authService.adminSign(administrator)
     }
   }
 
@@ -98,16 +104,16 @@ export class AppController {
   @ApiOperation({ operationId: 'token', summary: '刷新Token' })
   @ApiOkResponse({ type: TokenResponse })
   @UseGuards(RefreshTokenGuard)
-  token(@RequestUser() admin: Admin) {
-    if (admin) {
-      return this.authService.adminSign(admin)
+  token(@RequestUser() administrator: Administrator) {
+    if (administrator) {
+      return this.authService.adminSign(administrator)
     }
   }
 
   @Get('current-user')
   @ApiOperation({ operationId: 'getCurrentUser', summary: '获取当前用户信息' })
-  @ApiOkResponse({ type: Admin })
-  getCurrentUser(@RequestUser() admin: Admin) {
-    return omit(['password'], admin)
+  @ApiOkResponse({ type: Administrator })
+  getCurrentUser(@RequestUser() administrator: Administrator) {
+    return omit(['password'], administrator)
   }
 }

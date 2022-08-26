@@ -31,7 +31,7 @@ function setupSwagger(app: NestFastifyApplication) {
         'access-token',
       )
       .addTag('app', '系统')
-      .addTag('admin', '管理员')
+      .addTag('administrator', '管理员')
       .addTag('user', '用户')
       .addTag('banner', 'Banner')
 

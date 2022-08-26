@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsOptional, IsString, Length } from 'class-validator'
 import { pipe } from 'ramda'
 import { WhereOperator } from 'src/config/enum.config'
-import { Admin } from 'src/entities/admin.entity'
+import { Administrator } from 'src/entities/administrator.entity'
 import { WhereOption } from 'src/shared/typeorm/decorators'
 import { PageInput } from 'src/shared/typeorm/query/inputs/page.input'
 import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
@@ -24,7 +24,7 @@ export class LoginInput {
 /**
  * 添加管理员
  */
-export class CreateAdminInput {
+export class CreateAdministratorInput {
   @ApiProperty()
   @Length(5, 20)
   username: string
@@ -37,7 +37,7 @@ export class CreateAdminInput {
 /**
  * 添加管理员
  */
-export class UpdateAdminInput {
+export class UpdateAdministratorInput {
   @ApiProperty()
   @Length(2, 20)
   @IsString()
@@ -60,10 +60,10 @@ export class UpdatePasswordInput {
   newPassword: string
 }
 
-export class FindAdminInput extends pipe(
+export class FindAdministratorInput extends pipe(
   PageInput,
   OrderInput,
-)(QueryInput<Admin>) {
+)(QueryInput<Administrator>) {
   @ApiProperty({ required: false, description: '姓名(模糊查询)' })
   @IsOptional()
   @WhereOption({ type: WhereOperator.Like })

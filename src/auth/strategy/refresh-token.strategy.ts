@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config'
 import { JWTOrigin } from 'src/config/enum.config'
 import { AuthService } from '../services/auth.service'
 import type { Cache } from 'cache-manager'
-import { Admin } from 'src/entities/admin.entity'
+import { Administrator } from 'src/entities/administrator.entity'
 import { User } from 'src/entities/user.entity'
 
 type JwtPayload = {
@@ -40,7 +40,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(req, payload: JwtPayload) {
-    const getTargetUser = (): Promise<User | Admin | undefined> => {
+    const getTargetUser = (): Promise<User | Administrator | undefined> => {
       switch (payload.origin) {
         case JWTOrigin.Admin:
           return this.authService.getAdminUser(payload.id, payload.username)

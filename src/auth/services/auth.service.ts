@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Admin } from 'src/entities/admin.entity'
+import { Administrator } from 'src/entities/administrator.entity'
 import { User } from 'src/entities/user.entity'
 import { Repository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
@@ -20,7 +20,8 @@ export class AuthService {
     private config: ConfigService,
     private jwtService: JwtService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-    @InjectRepository(Admin) private adminRepository: Repository<Admin>,
+    @InjectRepository(Administrator)
+    private administratorRepository: Repository<Administrator>,
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
@@ -51,7 +52,7 @@ export class AuthService {
    * @param password
    */
   async adminLogin(username: string, password: string) {
-    const admin = await this.adminRepository.findOne({
+    const admin = await this.administratorRepository.findOne({
       where: {
         username,
       },
@@ -74,7 +75,7 @@ export class AuthService {
    * @returns
    */
   async getAdminUser(id: string, username: string) {
-    return await this.adminRepository.findOne({
+    return await this.administratorRepository.findOne({
       where: {
         id,
         username,
@@ -108,12 +109,12 @@ export class AuthService {
    * @param admin
    * @returns
    */
-  async adminSign(admin: Admin) {
+  async adminSign(administrator: Administrator) {
     const jwtOrigin = JWTOrigin.Admin
 
     const payload = {
-      username: admin.username,
-      id: admin.id,
+      username: administrator.username,
+      id: administrator.id,
       origin: jwtOrigin,
     }
 
@@ -133,7 +134,7 @@ export class AuthService {
     })
 
     // 缓存AccessToken
-    await this.cacheManager.set(admin.id, refreshToken, {
+    await this.cacheManager.set(administrator.id, refreshToken, {
       ttl: refreshTokenExpiresIn,
     })
 

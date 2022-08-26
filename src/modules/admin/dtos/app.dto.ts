@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Length } from 'class-validator'
 
-class AdminInput {
+class AdministratorInput {
   @ApiProperty()
   @Length(5, 20)
   username: string
@@ -16,7 +16,7 @@ class AdminInput {
  */
 export class AppInitInput {
   @ApiProperty()
-  admin: AdminInput
+  administrator: AdministratorInput
 }
 
 export class AppBaseInput {

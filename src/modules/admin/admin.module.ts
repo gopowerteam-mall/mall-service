@@ -2,9 +2,6 @@ import { Module } from '@nestjs/common'
 import { UserController } from './controllers/user.controller'
 import { UserService } from './services/user.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Admin } from 'src/entities/admin.entity'
-import { AdminService } from './services/admin.service'
-import { AdminController } from './controllers/admin.controller'
 import { AppController } from './controllers/app.controller'
 import { User } from 'src/entities/user.entity'
 import { AuthModule } from 'src/auth/auth.module'
@@ -12,17 +9,20 @@ import { BannerController } from './controllers/banner.controller'
 import { BannerService } from './services/banner.service'
 import { Banner } from 'src/entities/banner.entity'
 import { QiniuModule } from '../qiniu/qiniu.module'
+import { AdministratorController } from './controllers/administrator.controller'
+import { AdministratorService } from './services/administrator.service'
+import { Administrator } from 'src/entities/administrator.entity'
 
 @Module({
   imports: [
     AuthModule,
     QiniuModule,
-    TypeOrmModule.forFeature([Admin, User, Banner]),
+    TypeOrmModule.forFeature([Administrator, User, Banner]),
   ],
-  providers: [UserService, AdminService, BannerService],
+  providers: [UserService, BannerService, AdministratorService],
   controllers: [
+    AdministratorController,
     UserController,
-    AdminController,
     AppController,
     BannerController,
   ],
