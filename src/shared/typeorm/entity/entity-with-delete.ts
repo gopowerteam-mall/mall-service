@@ -10,8 +10,8 @@ import { Constructor } from '.'
  */
 export function EntityWithSoftDelete<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
-    @DeleteDateColumn()
-    public deleteAt: Timestamp
+    @DeleteDateColumn({ type: 'timestamp without time zone' })
+    public deleteAt: Date
   }
   return AbstractBase
 }

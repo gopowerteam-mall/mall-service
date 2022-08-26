@@ -11,11 +11,17 @@ import { Constructor } from '.'
  */
 export function EntityWithTime<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
-    @CreateDateColumn({ name: 'created_at', type: 'time without time zone' })
+    @CreateDateColumn({
+      name: 'created_at',
+      type: 'timestamp without time zone',
+    })
     @ApiProperty({ description: '创建日期', type: 'string' })
     public createdAt: Date
 
-    @UpdateDateColumn({ name: 'updated_at', type: 'time without time zone' })
+    @UpdateDateColumn({
+      name: 'updated_at',
+      type: 'timestamp without time zone',
+    })
     @ApiProperty({ description: '更新日期', type: 'string' })
     public updatedAt: Date
   }
