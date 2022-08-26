@@ -82,7 +82,7 @@ export class QueryInput<T = any> {
               break
             case WhereOperator.Equal:
               where.andWhere(`${name} = :${key}`, {
-                [key]: `%${this[key]}%`,
+                [key]: this[key],
               })
               break
           }

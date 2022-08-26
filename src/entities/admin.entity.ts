@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, JoinTable, Index } from 'typeorm'
+import { Entity, Column } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithEnable,

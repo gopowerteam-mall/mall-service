@@ -8,10 +8,23 @@ import { AdminController } from './controllers/admin.controller'
 import { AppController } from './controllers/app.controller'
 import { User } from 'src/entities/user.entity'
 import { AuthModule } from 'src/auth/auth.module'
+import { BannerController } from './controllers/banner.controller'
+import { BannerService } from './services/banner.service'
+import { Banner } from 'src/entities/banner.entity'
+import { QiniuModule } from '../qiniu/qiniu.module'
 
 @Module({
-  imports: [AuthModule, TypeOrmModule.forFeature([Admin, User])],
-  providers: [UserService, AdminService],
-  controllers: [UserController, AdminController, AppController],
+  imports: [
+    AuthModule,
+    QiniuModule,
+    TypeOrmModule.forFeature([Admin, User, Banner]),
+  ],
+  providers: [UserService, AdminService, BannerService],
+  controllers: [
+    UserController,
+    AdminController,
+    AppController,
+    BannerController,
+  ],
 })
 export class AdminModule {}
