@@ -25,6 +25,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "9.0.8",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "9.0.8",
@@ -41,7 +42,9 @@
     "class-validator": "^0.13.2",
     "crypto-js": "^4.1.1",
     "log4js": "^6.6.1",
+    "nanoid": "^3.0.0",
     "passport": "^0.6.0",
+    "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",

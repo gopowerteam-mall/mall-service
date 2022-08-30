@@ -35,4 +35,8 @@ export default () => ({
     accessKey: process.env.QINIU_ACCESS_KEY,
     secretKey: process.env.QINIU_SECRET_KEY,
   },
+  weapp: {
+    appid: process.env.WEAPP_APPID,
+    secret: process.env.WEAPP_SECRET,
+  },
 })

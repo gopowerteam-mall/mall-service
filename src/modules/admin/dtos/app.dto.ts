@@ -23,3 +23,16 @@ export class AppBaseInput {
   @ApiProperty()
   basetime: number
 }
+
+/**
+ * 登录
+ */
+export class LoginInput {
+  @ApiProperty()
+  @Length(5, 20)
+  username: string
+
+  @ApiProperty()
+  @Length(6, 20)
+  password: string
+}

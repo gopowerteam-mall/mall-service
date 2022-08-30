@@ -17,4 +17,20 @@ export class User extends pipe(
   @ApiProperty({ description: '用户昵称' })
   @Column()
   nickname: string
+
+  @ApiProperty({ description: 'OPENID' })
+  @Column()
+  openid: string
+
+  @ApiProperty({ description: 'UNIONID' })
+  @Column({ nullable: true })
+  unionid: string
+
+  @ApiProperty({ description: '手机号码' })
+  @Column({ nullable: true })
+  mobile: string
+
+  @ApiProperty({ description: '用户头像' })
+  @Column({ nullable: true })
+  avatar: string
 }

@@ -45,7 +45,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
         case JWTOrigin.Admin:
           return this.authService.getAdminUser(payload.id, payload.username)
         case JWTOrigin.Weapp:
-          return this.authService.getWeappUser(payload.id, payload.username)
+          return this.authService.getWeappUser(payload.id)
       }
     }
 

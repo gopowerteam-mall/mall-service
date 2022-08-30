@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import * as qiniu from 'qiniu'
 import { TokenService } from './token.service'
+import { nanoid } from 'nanoid'
 
 @Injectable()
 export class FileService {
@@ -73,6 +74,28 @@ export class FileService {
           resolve()
         },
       )
+    })
+  }
+
+  /**
+   * 下载外部资源
+   * @param url
+   * @param key
+   * @returns
+   */
+  public download(url: string, key: string = nanoid()) {
+    const mainBucket = this.config.get('qiniu.storage.main.bucket')
+
+    const bucketManager = this.getBucketManager()
+
+    return new Promise<string>((resolve, reject) => {
+      bucketManager.fetch(url, mainBucket, key, (err, respBody, respInfo) => {
+        if (err) {
+          return reject(`外部资源${key}下载失败`)
+        }
+
+        resolve(key)
+      })
     })
   }
 }

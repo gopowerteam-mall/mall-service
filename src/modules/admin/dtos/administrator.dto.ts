@@ -9,19 +9,6 @@ import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 import { OrderInput } from 'src/shared/typeorm/query/inputs/order.input'
 
 /**
- * 登录
- */
-export class LoginInput {
-  @ApiProperty()
-  @Length(5, 20)
-  username: string
-
-  @ApiProperty()
-  @Length(6, 20)
-  password: string
-}
-
-/**
  * 添加管理员
  */
 export class CreateAdministratorInput {

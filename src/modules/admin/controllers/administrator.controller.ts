@@ -17,7 +17,9 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger'
+import { omit } from 'ramda'
 import { AuthService } from 'src/auth/services/auth.service'
+import { Public } from 'src/decorators/public.decorator'
 import { RequestUser } from 'src/decorators/request-user.decorator'
 import { Administrator } from 'src/entities/administrator.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
@@ -43,10 +45,12 @@ export class AdministratorController {
   @ApiOperation({ operationId: 'createAdministrator', summary: '创建管理员' })
   @ApiOkResponse({ type: Administrator })
   create(@Body() createAdministratorInput: CreateAdministratorInput) {
-    return this.administratorService.create(
+    const administrator = this.administratorService.create(
       createAdministratorInput.username,
       createAdministratorInput.password,
     )
+
+    return omit(['password'], administrator)
   }
 
   @Put(':id')

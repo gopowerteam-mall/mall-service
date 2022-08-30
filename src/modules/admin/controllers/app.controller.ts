@@ -20,7 +20,7 @@ import { AuthService } from 'src/auth/services/auth.service'
 import { Public } from 'src/decorators/public.decorator'
 import { RequestUser } from 'src/decorators/request-user.decorator'
 import { Administrator } from 'src/entities/administrator.entity'
-import { LoginInput } from '../dtos/administrator.dto'
+import { LoginInput } from '../dtos/app.dto'
 import { AppInitInput } from '../dtos/app.dto'
 import { AdministratorService } from '../services/administrator.service'
 import { AppBaseResponse, TokenResponse } from '../responses/app.response'
@@ -92,9 +92,10 @@ export class AppController {
   @ApiOkResponse({ type: TokenResponse })
   login(
     @RequestUser() administrator: Administrator,
+    // eslint-disable-next-line
     @Body() loginInput: LoginInput,
   ) {
-    if (loginInput.username === administrator.username) {
+    if (administrator) {
       return this.authService.adminSign(administrator)
     }
   }
@@ -110,8 +111,8 @@ export class AppController {
     }
   }
 
-  @Get('current-user')
-  @ApiOperation({ operationId: 'getCurrentUser', summary: '获取当前用户信息' })
+  @Get('current')
+  @ApiOperation({ operationId: 'getCurrentAdmin', summary: '获取当前用户信息' })
   @ApiOkResponse({ type: Administrator })
   getCurrentUser(@RequestUser() administrator: Administrator) {
     return omit(['password'], administrator)
