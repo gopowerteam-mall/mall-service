@@ -144,12 +144,13 @@ export class AuthService {
    */
   async weappLogin(code: string) {
     // 获取openid
+
     const {
       data: { errcode, errmsg, openid },
     } = await lastValueFrom(
       this.httpService.get(WEAPP_API.code2session, {
         params: {
-          code,
+          js_code: code,
           grant_type: 'authorization_code',
           appid: this.config.get('weapp.appid'),
           secret: this.config.get('weapp.secret'),

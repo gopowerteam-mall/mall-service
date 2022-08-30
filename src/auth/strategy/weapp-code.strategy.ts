@@ -16,7 +16,6 @@ export class WeappCodeStrategy extends PassportStrategy(
   async validate(req): Promise<any> {
     // 小程序登陆码 - code
     const code = req.query?.code
-
     // 用户登录
     const user = this.authService.weappLogin(code)
 

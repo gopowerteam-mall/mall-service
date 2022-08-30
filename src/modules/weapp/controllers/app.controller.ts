@@ -39,7 +39,7 @@ export class AppController {
   }
 
   @Public()
-  @Post('login')
+  @Get('login')
   @ApiOperation({ operationId: 'login', summary: '用户登录' })
   @ApiOkResponse({ type: TokenResponse })
   @UseGuards(WeappCodeGuard)
