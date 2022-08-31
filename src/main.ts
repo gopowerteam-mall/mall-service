@@ -34,6 +34,7 @@ function setupSwagger(app: NestFastifyApplication) {
       .addTag('administrator', '管理员')
       .addTag('user', '用户')
       .addTag('banner', 'Banner')
+      .addTag('qiniu', '七牛')
 
       .build()
 
@@ -64,7 +65,9 @@ function setupSwagger(app: NestFastifyApplication) {
       .setDescription('API description')
       .setVersion('1.0')
       .addBearerAuth()
-      .addTag('App', '系统管理')
+      .addTag('app', '系统')
+      .addTag('user', '用户')
+      .addTag('qiniu', '七牛')
       .build()
 
     const weappDocument = SwaggerModule.createDocument(
