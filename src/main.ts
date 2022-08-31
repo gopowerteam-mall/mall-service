@@ -67,6 +67,8 @@ function setupSwagger(app: NestFastifyApplication) {
       .addBearerAuth()
       .addTag('app', '系统')
       .addTag('user', '用户')
+      .addTag('category', '商品分类')
+
       .addTag('qiniu', '七牛')
       .build()
 
