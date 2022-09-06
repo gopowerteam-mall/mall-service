@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { omit } from 'ramda'
-import { Order } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
-import { Repository } from 'typeorm'
-import { CreateCategoryInput, UpdateCategoryInput } from '../dtos/category.dto'
+import { Repository, TreeRepository } from 'typeorm'
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Category)
+    private readonly categoryTreeRepository: TreeRepository<Category>,
+
     private readonly fileService: FileService,
   ) {}
   /**
@@ -50,12 +50,22 @@ export class CategoryService {
    * 查找Category
    * @returns
    */
-  findAll({ buildWhereQuery }: QueryInputParam<Category>) {
+  async findAll({ buildWhereQuery }: QueryInputParam<Category>) {
     const builder = this.categoryRepository.createQueryBuilder('category')
 
-    builder.andWhere(buildWhereQuery())
+    builder
+      .andWhere(buildWhereQuery())
+      .leftJoinAndSelect('category.parent', 'parent')
 
     return builder.getMany()
+  }
+
+  /**
+   * 查找Category
+   * @returns
+   */
+  findRecursion() {
+    return this.categoryTreeRepository.findTrees()
   }
 
   /**
@@ -63,8 +73,11 @@ export class CategoryService {
    * @param id
    * @returns
    */
-  findOne(id: string) {
-    return this.categoryRepository.findOneBy({ id })
+  findOne(id: string, relations = { children: true }) {
+    return this.categoryRepository.findOne({
+      where: { id },
+      relations,
+    })
   }
 
   /**

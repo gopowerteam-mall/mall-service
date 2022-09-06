@@ -1,4 +1,12 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  TreeParent,
+  TreeChildren,
+  Tree,
+} from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithEnable,
@@ -10,6 +18,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger'
 
 @Entity('category')
+@Tree('materialized-path')
 export class Category extends pipe(
   EntityWithUUID,
   EntityWithEnable,
@@ -29,13 +38,10 @@ export class Category extends pipe(
   recommended: boolean
 
   @ApiProperty({ description: '父节点' })
-  @ManyToOne(() => Category, (category) => category.children, {
-    cascade: true,
-    eager: true,
-  })
+  @TreeParent()
   parent: Category
 
   @ApiProperty({ description: '子节点' })
-  @OneToMany(() => Category, (category) => category.parent)
+  @TreeChildren()
   children: Category[]
 }
