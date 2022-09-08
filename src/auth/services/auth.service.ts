@@ -11,7 +11,7 @@ import { User } from 'src/entities/user.entity'
 import { Repository } from 'typeorm'
 import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
-import { JWTOrigin } from 'src/config/enum.config'
+import { AppOrigin } from 'src/config/enum.config'
 import { Cache } from 'cache-manager'
 import { HttpService } from '@nestjs/axios'
 import { lastValueFrom } from 'rxjs'
@@ -100,7 +100,7 @@ export class AuthService {
    * @returns
    */
   async adminSign(administrator: Administrator) {
-    const jwtOrigin = JWTOrigin.Admin
+    const jwtOrigin = AppOrigin.Admin
 
     const payload = {
       username: administrator.username,
@@ -198,7 +198,7 @@ export class AuthService {
    * @returns
    */
   async weappSign(user: User) {
-    const jwtOrigin = JWTOrigin.Weapp
+    const jwtOrigin = AppOrigin.Weapp
 
     const payload = {
       id: user.id,

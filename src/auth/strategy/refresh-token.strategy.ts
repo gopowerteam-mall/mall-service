@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { JWTOrigin } from 'src/config/enum.config'
+import { AppOrigin } from 'src/config/enum.config'
 import { AuthService } from '../services/auth.service'
 import type { Cache } from 'cache-manager'
 import { Administrator } from 'src/entities/administrator.entity'
@@ -17,7 +17,7 @@ type JwtPayload = {
   id: string
   username?: string
   openid?: string
-  origin: JWTOrigin
+  origin: AppOrigin
 }
 
 @Injectable()
@@ -42,9 +42,9 @@ export class RefreshTokenStrategy extends PassportStrategy(
   async validate(req, payload: JwtPayload) {
     const getTargetUser = (): Promise<User | Administrator | undefined> => {
       switch (payload.origin) {
-        case JWTOrigin.Admin:
+        case AppOrigin.Admin:
           return this.authService.getAdminUser(payload.id, payload.username)
-        case JWTOrigin.Weapp:
+        case AppOrigin.Weapp:
           return this.authService.getWeappUser(payload.id)
       }
     }

@@ -3,12 +3,23 @@ import { ConfigService } from '@nestjs/config'
 import * as qiniu from 'qiniu'
 import { TokenService } from './token.service'
 import { nanoid } from 'nanoid'
+import { RequestContext } from 'src/middlewaves/request-context.middlewave'
+import { Material } from 'src/entities/material.entity'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { minitypeToFileType } from 'src/shared/common'
+import { MaterialGroup } from 'src/entities/material-group.entity'
 
 @Injectable()
 export class FileService {
   constructor(
     private readonly config: ConfigService,
     private readonly tokenService: TokenService,
+    private readonly requestContext: RequestContext,
+    @InjectRepository(Material)
+    private materialRepository: Repository<Material>,
+    @InjectRepository(MaterialGroup)
+    private materialGroupRepository: Repository<MaterialGroup>,
   ) {}
 
   /**
@@ -36,33 +47,14 @@ export class FileService {
     )
   }
 
-  /**
-   * 保存文件
-   * @param key
-   */
-  public async save(key: string) {
-    const tempBucket = this.config.get('qiniu.storage.temp.bucket')
-    const mainBucket = this.config.get('qiniu.storage.main.bucket')
-
-    const [mainFile] = await this.listFile(tempBucket, key)
-    const [tempFile] = await this.listFile(mainBucket, key)
-
-    if (!mainFile && !tempFile) {
-      throw new Error('无法找到需要保存的文件')
-    }
-
-    if (!mainFile) {
-      // 文件已存在
-      return
-    }
-
+  private copyFile(sourceBucket, targetBucket, key) {
     const bucketManager = this.getBucketManager()
 
     return new Promise<void>((resolve, reject) => {
       bucketManager.copy(
-        tempBucket,
+        sourceBucket,
         key,
-        mainBucket,
+        targetBucket,
         key,
         { force: true },
         (err) => {
@@ -70,11 +62,46 @@ export class FileService {
             return reject()
           }
 
-          // 待测试
+          // 保存成功
           resolve()
         },
       )
     })
+  }
+
+  /**
+   * 保存文件
+   * @param key
+   */
+  public async save(key: string, group?: string) {
+    const tempBucket = this.config.get('qiniu.storage.temp.bucket')
+    const mainBucket = this.config.get('qiniu.storage.main.bucket')
+
+    const [tempFile] = await this.listFile(tempBucket, key)
+    const [mainFile] = await this.listFile(mainBucket, key)
+
+    if (!tempFile) {
+      throw new Error('无法找到需要保存的文件')
+    }
+
+    if (mainFile) {
+      // 文件已存在
+      return
+    }
+
+    await this.copyFile(tempBucket, mainBucket, key)
+
+    const material = await this.materialRepository.create({
+      key,
+      origin: this.requestContext.origin,
+      type: minitypeToFileType(tempFile.mimeType),
+    })
+
+    if (group) {
+      material.group = await this.materialGroupRepository.preload({ id: group })
+    }
+
+    material.save()
   }
 
   /**

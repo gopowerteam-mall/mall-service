@@ -15,18 +15,30 @@ import { Administrator } from 'src/entities/administrator.entity'
 import { CategoryController } from './controllers/category.controller'
 import { Category } from 'src/entities/category.entity'
 import { CategoryService } from './services/category.service'
+import { MaterialController } from './controllers/material.controller'
+import { MaterialService } from './services/material.service'
+import { Material } from 'src/entities/material.entity'
+import { MaterialGroup } from 'src/entities/material-group.entity'
 
 @Module({
   imports: [
     AuthModule,
     QiniuModule,
-    TypeOrmModule.forFeature([Administrator, User, Banner, Category]),
+    TypeOrmModule.forFeature([
+      Administrator,
+      User,
+      Banner,
+      Category,
+      Material,
+      MaterialGroup,
+    ]),
   ],
   providers: [
     UserService,
     BannerService,
     AdministratorService,
     CategoryService,
+    MaterialService,
   ],
   controllers: [
     AdministratorController,
@@ -34,6 +46,7 @@ import { CategoryService } from './services/category.service'
     AppController,
     BannerController,
     CategoryController,
+    MaterialController,
   ],
 })
 export class AdminModule {}

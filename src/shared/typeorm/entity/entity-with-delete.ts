@@ -1,4 +1,4 @@
-import { DeleteDateColumn, Timestamp } from 'typeorm'
+import { DeleteDateColumn } from 'typeorm'
 import { Constructor } from '.'
 
 /**
@@ -8,10 +8,13 @@ import { Constructor } from '.'
  * @param Base
  * @returns
  */
-export function EntityWithSoftDelete<TBase extends Constructor>(Base: TBase) {
+export function EntityWithDelete<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
-    @DeleteDateColumn({ type: 'timestamp without time zone' })
-    public deleteAt: Date
+    @DeleteDateColumn({
+      name: 'deleted_at',
+      type: 'timestamp without time zone',
+    })
+    public deletedAt: Date
   }
   return AbstractBase
 }

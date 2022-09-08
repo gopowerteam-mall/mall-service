@@ -11,6 +11,7 @@ import { AdminModule } from './modules/admin/admin.module'
 import { WeappModule } from './modules/weapp/weapp.module'
 import { join } from 'path'
 import { QiniuModule } from './modules/qiniu/qiniu.module'
+import { RequestContextMiddleware } from './middlewaves/request-context.middlewave'
 /**
  * 配置Swagger
  * @param app
@@ -34,6 +35,8 @@ function setupSwagger(app: NestFastifyApplication) {
       .addTag('administrator', '管理员')
       .addTag('user', '用户')
       .addTag('banner', 'Banner')
+      .addTag('material', '素材')
+
       .addTag('qiniu', '七牛')
 
       .build()
@@ -126,6 +129,9 @@ async function bootstrap() {
       },
     }),
   )
+
+  // 安装中间件
+  app.use(RequestContextMiddleware)
 
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),

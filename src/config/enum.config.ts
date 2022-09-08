@@ -29,7 +29,7 @@ export enum AdminRole {
 /**
  * TOKEN来源
  */
-export enum JWTOrigin {
+export enum AppOrigin {
   Admin = 'admin',
   Weapp = 'weapp',
 }
@@ -41,4 +41,15 @@ export enum BannerType {
   URL = 'URL',
   Page = 'PAGE',
   Project = 'PROJECT',
+}
+
+/**
+ * 文件类型
+ */
+export enum FileType {
+  Image = 'IMAGE',
+  Video = 'VIDEO',
+  Audio = 'AUDIO',
+  Document = 'DOCUMENT',
+  Other = 'OTHER',
 }
