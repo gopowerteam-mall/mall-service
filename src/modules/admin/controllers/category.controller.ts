@@ -36,6 +36,7 @@ export class CategoryController {
     const parent = input.parentId
       ? await this.categoryService.findOne(input.parentId, {
           children: false,
+          parent: false,
         })
       : undefined
 
@@ -52,6 +53,7 @@ export class CategoryController {
     const parent = input.parentId
       ? await this.categoryService.findOne(input.parentId, {
           children: false,
+          parent: false,
         })
       : undefined
 
