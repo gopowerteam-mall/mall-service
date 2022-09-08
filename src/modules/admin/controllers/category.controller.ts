@@ -73,7 +73,7 @@ export class CategoryController {
   @ApiOperation({ operationId: 'getCategory', summary: '获取分类' })
   @ApiOkResponse({ type: Category })
   findOne(@Param() { id }: IdInput) {
-    return this.categoryService.findOne(id)
+    return this.categoryService.findOne(id, { children: true, parent: true })
   }
 
   @Delete(':id')

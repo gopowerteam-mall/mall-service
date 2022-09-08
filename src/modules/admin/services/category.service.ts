@@ -73,7 +73,7 @@ export class CategoryService {
    * @param id
    * @returns
    */
-  findOne(id: string, relations = { children: true }) {
+  findOne(id: string, relations = { children: true, parent: false }) {
     return this.categoryRepository.findOne({
       where: { id },
       relations,
