@@ -78,11 +78,11 @@ export class AdministratorController {
 
   @Delete(':id')
   @ApiOperation({
-    operationId: 'removeAdministrator',
+    operationId: 'deleteAdministrator',
     summary: '删除用户',
   })
-  remove(@Param() { id }: IdInput) {
-    return this.administratorService.remove(id)
+  delete(@Param() { id }: IdInput) {
+    return this.administratorService.delete(id)
   }
 
   @Patch('reset-password/:id')

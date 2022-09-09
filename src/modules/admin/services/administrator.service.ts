@@ -38,12 +38,8 @@ export class AdministratorService {
    * 删除管理员
    * @returns
    */
-  public async remove(id: string) {
-    const administrator = await this.administratorRepository.preload({ id })
-
-    if (administrator) {
-      return administrator.remove()
-    }
+  public async delete(id: string) {
+    await this.administratorRepository.delete(id)
   }
 
   /**

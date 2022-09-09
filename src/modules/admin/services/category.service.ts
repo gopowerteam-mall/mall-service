@@ -38,12 +38,8 @@ export class CategoryService {
    * 删除Category
    * @returns
    */
-  async remove(id: string) {
-    const category = await this.categoryRepository.preload({ id })
-
-    if (category) {
-      return category.remove()
-    }
+  async delete(id: string) {
+    return this.categoryRepository.delete(id)
   }
 
   /**

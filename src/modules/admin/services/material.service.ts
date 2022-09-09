@@ -6,7 +6,7 @@ import { Material } from 'src/entities/material.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
-import { In, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class MaterialService {
@@ -53,7 +53,7 @@ export class MaterialService {
    * @param key
    * @returns
    */
-  public removeBatch(ids: string[]) {
+  public deleteBatch(ids: string[]) {
     return this.materialRepository.softDelete(ids)
   }
 
@@ -64,15 +64,8 @@ export class MaterialService {
    * @returns
    */
   public async changeGroupBatch(ids: string[], group?: string) {
-    // 获取目标分组
-    const materialGroup = group
-      ? await this.materialGroupRepository.preload({
-          id: group,
-        })
-      : undefined
-
     return this.materialRepository.update(ids, {
-      group: materialGroup,
+      group: group ? { id: group } : undefined,
     })
   }
 
@@ -112,8 +105,14 @@ export class MaterialService {
    * 删除分组
    * @param id
    */
-  public removeGroup(id: string) {
-    // TODO:添加安全检测
-    return this.materialGroupRepository.preload({ id })
+  public async deleteGroup(id: string, target?: string) {
+    // 更新原分组数据
+    await this.materialRepository.update(
+      { group: { id } },
+      { group: target ? { id: target } : undefined },
+    )
+
+    // 删除分组
+    return this.materialGroupRepository.delete(id)
   }
 }

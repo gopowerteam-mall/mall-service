@@ -80,10 +80,10 @@ export class CategoryController {
 
   @Delete(':id')
   @ApiOperation({
-    operationId: 'removeCategory',
+    operationId: 'deleteCategory',
     summary: '删除分类',
   })
-  remove(@Param() { id }: IdInput) {
-    return this.categoryService.remove(id)
+  delete(@Param() { id }: IdInput) {
+    return this.categoryService.delete(id)
   }
 }

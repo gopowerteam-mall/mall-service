@@ -1,5 +1,5 @@
 import { Optional } from '@nestjs/common'
-import { ApiProperty, PartialType } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 import { IsString } from 'class-validator'
 import { pipe } from 'ramda'
 import { WhereOperator } from 'src/config/enum.config'
@@ -13,6 +13,10 @@ import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
  * 添加Material
  */
 export class CreateMaterialInput {
+  @ApiProperty()
+  @IsString()
+  key: string
+
   @ApiProperty({ required: false })
   @Optional()
   group: string
@@ -47,4 +51,13 @@ export class UpdateMaterialGroupInput {
   @ApiProperty()
   @IsString()
   name: string
+}
+
+/**
+ * 更新MaterialGroup
+ */
+export class DeleteMaterialGroupInput {
+  @ApiProperty({ description: '删除后移动到的目标分组ID' })
+  @Optional()
+  target: string
 }

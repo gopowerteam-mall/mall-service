@@ -61,11 +61,11 @@ export class BannerController {
 
   @Delete(':id')
   @ApiOperation({
-    operationId: 'removeBanner',
+    operationId: 'deleteBanner',
     summary: '删除Banner',
   })
-  remove(@Param() { id }: IdInput) {
-    return this.bannerService.remove(id)
+  delete(@Param() { id }: IdInput) {
+    return this.bannerService.delete(id)
   }
 
   @Patch('change-order/:id')

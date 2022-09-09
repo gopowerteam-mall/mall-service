@@ -36,12 +36,8 @@ export class BannerService {
    * 删除Banner
    * @returns
    */
-  async remove(id: string) {
-    const banner = await this.bannerRepository.preload({ id })
-
-    if (banner) {
-      return banner.remove()
-    }
+  async delete(id: string) {
+    return await this.bannerRepository.delete(id)
   }
 
   /**
