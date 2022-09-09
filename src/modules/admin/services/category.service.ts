@@ -39,7 +39,9 @@ export class CategoryService {
    * @returns
    */
   async delete(id: string) {
-    return this.categoryRepository.delete(id)
+    return this.categoryRepository.delete(id).catch(() => {
+      throw new Error('删除失败')
+    })
   }
 
   /**
