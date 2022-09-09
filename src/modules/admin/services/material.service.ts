@@ -6,7 +6,7 @@ import { Material } from 'src/entities/material.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
-import { Repository } from 'typeorm'
+import { IsNull, Repository } from 'typeorm'
 
 @Injectable()
 export class MaterialService {
@@ -24,7 +24,7 @@ export class MaterialService {
    * @param group
    */
   public create(key: string, group?: string) {
-    this.fileService.save(key, group)
+    return this.fileService.save(key, group)
   }
 
   /**
@@ -73,9 +73,31 @@ export class MaterialService {
    * 获取分组列表
    * @returns
    */
-  public findAllGroup() {
-    // TODO：获取分组下元素数量
-    return this.materialGroupRepository.find()
+  public async findAllGroup() {
+    const groups = await this.materialGroupRepository
+      .createQueryBuilder('group')
+      .leftJoin(Material, 'material', 'material.groupId = group.id')
+      .select([
+        'group.id as id',
+        'group.name as name',
+        'COUNT(material.id)::int as count',
+      ])
+      .groupBy('group.id')
+      .getRawMany()
+
+    const count = await this.materialRepository
+      .createQueryBuilder('material')
+      .where('material.groupId IS NULL')
+      .getCount()
+
+    return [
+      ...groups,
+      {
+        id: '',
+        name: '未分组',
+        count,
+      },
+    ]
   }
 
   /**

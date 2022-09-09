@@ -18,7 +18,6 @@ import {
 import { Material } from 'src/entities/material.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
 import { IdsInput } from 'src/shared/typeorm/dto/ids.input'
-import { KeyInput } from 'src/shared/typeorm/dto/key.input'
 import {
   CreateMaterialGroupInput,
   CreateMaterialInput,
@@ -26,6 +25,7 @@ import {
   FindMaterialInput,
   UpdateMaterialGroupInput,
 } from '../dtos/material.dto'
+import { MaterialGroupResponse } from '../responses/material.response'
 import { MaterialService } from '../services/material.service'
 
 @Controller('material')
@@ -53,7 +53,7 @@ export class MaterialController {
     operationId: 'findMaterialGroup',
     summary: '获取素材分组',
   })
-  @ApiOkResponse({ type: Material })
+  @ApiOkResponse({ type: MaterialGroupResponse, isArray: true })
   findAllGroup() {
     return this.materialService.findAllGroup()
   }

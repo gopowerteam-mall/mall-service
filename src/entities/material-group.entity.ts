@@ -6,6 +6,6 @@ import { ApiProperty } from '@nestjs/swagger'
 @Entity('material-group')
 export class MaterialGroup extends pipe(EntityWithUUID)(EntityClass) {
   @ApiProperty({ description: '素材分组名称' })
-  @PrimaryColumn()
+  @Column()
   name: string
 }

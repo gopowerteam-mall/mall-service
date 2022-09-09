@@ -85,8 +85,7 @@ export class FileService {
     }
 
     if (mainFile) {
-      // 文件已存在
-      return
+      throw new Error('素材已存在')
     }
 
     await this.copyFile(tempBucket, mainBucket, key)
@@ -98,10 +97,12 @@ export class FileService {
     })
 
     if (group) {
-      material.group = await this.materialGroupRepository.preload({ id: group })
+      material.group = await this.materialGroupRepository.preload({
+        id: group,
+      })
     }
 
-    material.save()
+    return material.save()
   }
 
   /**
