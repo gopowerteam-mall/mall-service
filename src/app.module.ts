@@ -8,8 +8,9 @@ import { LoggerModule } from './logger/logger.module'
 import { WeappModule } from './modules/weapp/weapp.module'
 import { AdminModule } from './modules/admin/admin.module'
 import configuration from './config/configuration'
-import { RouterModule } from '@nestjs/core'
+import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core'
 import { QiniuModule } from './modules/qiniu/qiniu.module'
+import { ErrorInterceptor } from './interceptors/error.interceptor'
 
 @Module({
   imports: [
@@ -38,5 +39,11 @@ import { QiniuModule } from './modules/qiniu/qiniu.module'
     ]),
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ErrorInterceptor,
+    },
+  ],
 })
 export class AppModule {}

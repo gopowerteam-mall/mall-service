@@ -14,6 +14,7 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger'
+import { omit } from 'ramda'
 import { Category } from 'src/entities/category.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
 import {
@@ -57,7 +58,10 @@ export class CategoryController {
         })
       : undefined
 
-    return this.categoryService.update(id, { ...input, parent })
+    await this.categoryService.update(id, {
+      ...omit(['parentId'], input),
+      parent,
+    })
   }
 
   @Get()
