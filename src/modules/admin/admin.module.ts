@@ -19,6 +19,10 @@ import { MaterialController } from './controllers/material.controller'
 import { MaterialService } from './services/material.service'
 import { Material } from 'src/entities/material.entity'
 import { MaterialGroup } from 'src/entities/material-group.entity'
+import { Product } from 'src/entities/product.entity'
+import { ProductAttr } from 'src/entities/product-attr.entity'
+import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
+import { ProductSpec } from 'src/entities/product-spec.entity'
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { MaterialGroup } from 'src/entities/material-group.entity'
       Category,
       Material,
       MaterialGroup,
+      Product,
+      ProductAttr,
+      ProductAttrItem,
+      ProductSpec,
     ]),
   ],
   providers: [

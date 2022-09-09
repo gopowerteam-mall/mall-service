@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
