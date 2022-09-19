@@ -31,7 +31,7 @@ export class FindMaterialInput extends pipe(
 )(QueryInput<Material>) {
   @ApiProperty({ required: false })
   @Optional()
-  @WhereOption({ type: WhereOperator.Equal })
+  @WhereOption({ name: 'group_id', type: WhereOperator.Equal })
   group: string
 }
 

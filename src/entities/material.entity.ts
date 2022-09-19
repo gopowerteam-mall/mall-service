@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -34,5 +34,8 @@ export class Material extends pipe(
 
   @ApiProperty({ description: '分组', enum: AppOrigin })
   @ManyToOne(() => MaterialGroup, { nullable: true })
+  @JoinColumn({
+    name: 'group_id',
+  })
   group: MaterialGroup
 }

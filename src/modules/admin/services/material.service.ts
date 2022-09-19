@@ -32,9 +32,7 @@ export class MaterialService {
    */
   public findAll({ buildWhereQuery, page, order }: QueryInputParam<Material>) {
     const builder = this.materialRepository.createQueryBuilder('material')
-
     builder.andWhere(buildWhereQuery())
-
     const paginator = buildPaginator({
       mode: PaginatorMode.Index,
       entity: Material,

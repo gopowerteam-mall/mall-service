@@ -1,6 +1,7 @@
 import { Between, Brackets, FindOptionsWhere, In, Like } from 'typeorm'
 import {
   WHERE_OPTION_METADATA,
+  WHERE_OPTION_NAME_METADATA,
   WHERE_OPTION_TYPE_METADATA,
 } from 'src/config/constants'
 import { PageParams } from '../params/page-params'
@@ -19,18 +20,20 @@ export class QueryInput<T = any> {
       .filter((key: string) => this[key] !== undefined)
       .reduce((result, key) => {
         const type = Reflect.getMetadata(WHERE_OPTION_TYPE_METADATA, this, key)
+        const name = Reflect.getMetadata(WHERE_OPTION_NAME_METADATA, this, key)
+
         switch (type) {
           case WhereOperator.In:
-            result[key] = In(this[key])
+            result[name || key] = In(this[key])
             break
           case WhereOperator.Like:
-            result[key] = Like(`%${this[key]}%`)
+            result[name || key] = Like(`%${this[key]}%`)
             break
           case WhereOperator.Between:
-            result[key] = Between(this[key][0], this[key][1])
+            result[name || key] = Between(this[key][0], this[key][1])
             break
           case WhereOperator.Equal:
-            result[key] = this[key]
+            result[name || key] = this[key]
             break
         }
         return result
@@ -51,10 +54,16 @@ export class QueryInput<T = any> {
             key,
           )
 
+          const customName = Reflect.getMetadata(
+            WHERE_OPTION_NAME_METADATA,
+            this,
+            key,
+          )
+
           // 添加别名支持
           const name = alias
-            ? `${alias}.${toUnderscore(key)}`
-            : toUnderscore(key)
+            ? `${alias}.${customName || toUnderscore(key)}`
+            : customName || toUnderscore(key)
 
           switch (type) {
             case WhereOperator.In:
