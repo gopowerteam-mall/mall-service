@@ -23,8 +23,8 @@ export class MaterialService {
    * @param key
    * @param group
    */
-  public create(key: string, group?: string) {
-    return this.fileService.save(key, group)
+  public create(keys: string[], group?: string) {
+    return Promise.all(keys.map((key) => this.fileService.save(key, group)))
   }
 
   /**

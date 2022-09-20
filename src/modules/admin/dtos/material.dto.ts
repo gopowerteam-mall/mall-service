@@ -15,7 +15,7 @@ import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 export class CreateMaterialInput {
   @ApiProperty()
   @IsString()
-  key: string
+  keys: string[]
 
   @ApiProperty({ required: false })
   @Optional()
