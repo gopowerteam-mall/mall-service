@@ -37,7 +37,7 @@ export class Product extends pipe(
 
   @ApiProperty({ description: '推荐' })
   @Column()
-  recommend: boolean
+  recommended: boolean
 
   @ApiProperty({ description: 'Bannner' })
   @Column({ type: 'text', array: true })

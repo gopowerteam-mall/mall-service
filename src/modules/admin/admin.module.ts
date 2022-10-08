@@ -23,6 +23,8 @@ import { Product } from 'src/entities/product.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductSpec } from 'src/entities/product-spec.entity'
+import { ProductController } from './controllers/product.controller';
+import { ProductService } from './services/product.service';
 
 @Module({
   imports: [
@@ -47,6 +49,7 @@ import { ProductSpec } from 'src/entities/product-spec.entity'
     AdministratorService,
     CategoryService,
     MaterialService,
+    ProductService,
   ],
   controllers: [
     AdministratorController,
@@ -55,6 +58,7 @@ import { ProductSpec } from 'src/entities/product-spec.entity'
     BannerController,
     CategoryController,
     MaterialController,
+    ProductController,
   ],
 })
 export class AdminModule {}
