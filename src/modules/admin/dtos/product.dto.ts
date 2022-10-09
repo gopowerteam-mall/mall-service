@@ -1,13 +1,23 @@
 import { Optional } from '@nestjs/common'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { Transform, Type } from 'class-transformer'
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
+import {
+  IsBoolean,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator'
 import { WhereOperator } from 'src/config/enum.config'
 import { Product } from 'src/entities/product.entity'
 import { WhereOption } from 'src/shared/typeorm/decorators'
 import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 
-class createProductAttrItemInput {
+export class createProductAttrItemInput {
+  @ApiProperty({ description: '属性ID' })
+  @IsUUID()
+  id: string
+
   @ApiProperty({ description: '属性项名称' })
   @IsString()
   name: string
@@ -18,7 +28,7 @@ class createProductAttrItemInput {
   image: string
 }
 
-class createProductAttrInput {
+export class createProductAttrInput {
   @ApiProperty({ description: '属性名称' })
   @IsString()
   name: string
@@ -36,7 +46,7 @@ class createProductAttrInput {
   items: createProductAttrItemInput[]
 }
 
-class createProductSpecInput {
+export class createProductSpecInput {
   @ApiProperty({ description: '属性项组合[]' })
   @IsString({ each: true })
   items: string[]

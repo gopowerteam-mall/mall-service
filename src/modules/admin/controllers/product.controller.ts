@@ -21,11 +21,18 @@ import {
   FindProductInput,
   UpdateProductInput,
 } from '../dtos/product.dto'
+import { CategoryService } from '../services/category.service'
+import { ProductService } from '../services/product.service'
 
 @Controller('product')
 @ApiTags('product')
 @ApiSecurity('access-token')
 export class ProductController {
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+  ) {}
+
   @Get()
   @ApiOperation({ operationId: 'findProduct', summary: '查询商品' })
   @ApiOkResponse({ type: Product, isArray: true })
@@ -43,8 +50,25 @@ export class ProductController {
   @Post()
   @ApiOperation({ operationId: 'createProduct', summary: '创建商品' })
   @ApiOkResponse({ type: Product })
-  create(@Body() {}: CreateProductInput) {
-    return
+  async create(@Body() input: CreateProductInput) {
+    const { attrs, specs, categoryId, ...product } = input
+
+    const productAttrs = attrs.map((attr) =>
+      this.productService.createProductAttr(attr),
+    )
+
+    const productSpecs = specs.map((spec) =>
+      this.productService.createProductSpec(spec),
+    )
+
+    const category = await this.categoryService.findOne(categoryId)
+
+    return this.productService.create(
+      product,
+      category,
+      productAttrs,
+      productSpecs,
+    )
   }
 
   @Put(':id')

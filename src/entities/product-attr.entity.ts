@@ -34,5 +34,5 @@ export class ProductAttr extends pipe(
 
   @ApiProperty({ description: '属性项' })
   @OneToMany(() => ProductAttrItem, (item) => item.attr)
-  items: ProductAttrItem
+  items: ProductAttrItem[]
 }
