@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithEnable,
@@ -53,6 +53,7 @@ export class Product extends pipe(
 
   @ApiProperty({ description: '分类' })
   @ManyToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
   category: Category
 
   @ApiProperty({ description: '属性' })

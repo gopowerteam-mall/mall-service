@@ -71,7 +71,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: '推荐' })
   @IsBoolean()
-  recommend: boolean
+  recommended: boolean
 
   @ApiProperty({ description: 'Bannner' })
   @IsString({ each: true })
@@ -113,6 +113,11 @@ export class FindProductInput extends QueryInput<Product> {
   @Optional()
   @WhereOption({ type: WhereOperator.Like })
   title: string
+
+  @ApiProperty({ description: '分类', required: false })
+  @Optional()
+  @WhereOption({ name: 'category_id', type: WhereOperator.Equal })
+  category: string
 
   @ApiProperty({ description: '是否推荐', required: false })
   @Optional()

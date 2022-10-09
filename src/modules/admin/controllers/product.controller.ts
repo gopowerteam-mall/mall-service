@@ -37,7 +37,7 @@ export class ProductController {
   @ApiOperation({ operationId: 'findProduct', summary: '查询商品' })
   @ApiOkResponse({ type: Product, isArray: true })
   findAll(@Query() input: FindProductInput) {
-    return
+    return this.productService.findAll(input.params)
   }
 
   @Get(':id')

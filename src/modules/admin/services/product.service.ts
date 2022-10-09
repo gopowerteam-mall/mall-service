@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
+import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
 import { ProductSpec } from 'src/entities/product-spec.entity'
 import { Product } from 'src/entities/product.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
+import { QueryInputParam } from 'src/shared/typeorm/interfaces'
+import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { DataSource, Repository } from 'typeorm'
 import {
   createProductAttrInput,
@@ -30,8 +33,30 @@ export class ProductService {
   /**
    * 查询商品列表
    */
-  public findAll() {
-    return
+  public async findAll({
+    buildWhereQuery,
+    page,
+    order,
+  }: QueryInputParam<Product>) {
+    const builder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.attrs', 'attrs')
+      .leftJoinAndSelect('attrs.items', 'items')
+      .leftJoinAndSelect('product.specs', 'specs')
+
+    builder.andWhere(buildWhereQuery())
+
+    const paginator = buildPaginator({
+      mode: PaginatorMode.Index,
+      entity: Product,
+      query: {
+        order: order,
+        skip: page.skip,
+        limit: page.limit,
+      },
+    })
+
+    return paginator.paginate(builder)
   }
 
   /**
@@ -61,6 +86,8 @@ export class ProductService {
     })
 
     await this.dataSource.manager.transaction(async (manager) => {
+      attrs.forEach(async ({ items }) => await manager.save(items))
+
       product.attrs = await manager.save(attrs)
       product.specs = await manager.save(specs)
 

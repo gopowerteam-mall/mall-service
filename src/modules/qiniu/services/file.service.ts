@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { minitypeToFileType } from 'src/shared/common'
 import { MaterialGroup } from 'src/entities/material-group.entity'
+import { Logger } from 'src/logger/services/logger.service'
 
 @Injectable()
 export class FileService {
@@ -20,6 +21,7 @@ export class FileService {
     private materialRepository: Repository<Material>,
     @InjectRepository(MaterialGroup)
     private materialGroupRepository: Repository<MaterialGroup>,
+    private logger: Logger,
   ) {}
 
   /**
@@ -81,11 +83,13 @@ export class FileService {
     const [mainFile] = await this.listFile(mainBucket, key)
 
     if (!tempFile) {
-      throw new Error('无法找到需要保存的文件')
+      this.logger.warn(`无法找到素材(${key})`)
+      return
     }
 
     if (mainFile) {
-      throw new Error('素材已存在')
+      this.logger.warn(`素材(${key})已存在`)
+      return
     }
 
     await this.copyFile(tempBucket, mainBucket, key)
