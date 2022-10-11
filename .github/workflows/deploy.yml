@@ -8,11 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to Staging
-        uses: Techie-Pi/node-vps-deployment@main
-        with:
-          remote-path: "~/app/mall-service"
-          host: 121.5.165.149
-          username: "root"
-          password: ${{ secrets.SSH_PASSWORD }}
-          pm2-id: "mall-service"
+      - name: setup ssh
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+      - name: install pm2
+        run: npm install pm2 -g
+
+      - name: deploy
+        run:  npm run deploy:pm2
