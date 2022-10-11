@@ -3,12 +3,6 @@ module.exports = {
     {
       name: 'mall-service',
       script: './dist/main.js',
-      env_development: {
-        NODE_ENV: 'local',
-      },
-      env_production: {
-        NODE_ENV: 'production',
-      },
       log: './output.log',
     },
   ],
@@ -25,9 +19,6 @@ module.exports = {
         'pnpm install \
         && npm run build \
         && pm2 reload ecosystem.config.js', //部署后的动作
-      env: {
-        NODE_ENV: 'production',
-      },
     },
   },
 }
