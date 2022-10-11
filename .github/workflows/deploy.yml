@@ -3,51 +3,16 @@ on:
   push:
     branches:
       - master
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - name: Deploy to Staging
+        uses: Techie-Pi/node-vps-deployment@main
         with:
-          node-version: 16
-
-      - uses: pnpm/action-setup@v2.0.1
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 7
-          run_install: false
-      
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: build
-        run: npm run build
-
-      - uses: amondnet/vercel-action@v25
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-args: '--prod'
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      - name: preview-url
-        run: |
-          echo ${{ steps.vercel-action.outputs.preview-url }}
+          remote-path: "~/app/mall-service"
+          host: 121.5.165.149
+          username: "root"
+          password: ${{ secrets.SSH_PASSWORD }}
+          pm2-id: "mall-service"
