@@ -153,7 +153,7 @@ async function launch(app: NestFastifyApplication) {
 
   const port = await config.get('app.port')
 
-  await app.listen(port).then(() => {
+  await app.listen(port, '0.0.0.0').then(() => {
     console.log(`launch at ${port}`)
   })
 }
