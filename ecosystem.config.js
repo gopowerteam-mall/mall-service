@@ -22,12 +22,7 @@ module.exports = {
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-deploy': 'git fetch --all',
       'post-deploy':
-        'pnpm install \
-        && npm run build \
-        && pm2 reload ecosystem.config.js --env production', //部署后的动作
-      env: {
-        NODE_ENV: 'production',
-      },
+        'pnpm install && npm run build && pm2 reload ecosystem.config.js --env production', //部署后的动作
     },
   },
 }
