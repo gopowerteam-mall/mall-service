@@ -153,7 +153,9 @@ async function launch(app: NestFastifyApplication) {
 
   const port = await config.get('app.port')
 
-  await app.listen(port)
+  await app.listen(port).then(() => {
+    console.log(`launch at ${port}`)
+  })
 }
 
 // 初始化并启动应用
