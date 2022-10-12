@@ -12,12 +12,12 @@ import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core'
 import { QiniuModule } from './modules/qiniu/qiniu.module'
 import { ErrorInterceptor } from './interceptors/error.interceptor'
 
+const environment = process.env.NODE_ENV || 'development'
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      ignoreEnvFile: ['production'].includes(process.env.NODE_ENV),
-      envFilePath: ['.env.development.local'],
+      envFilePath: [`.env.${environment}.local`],
       load: [configuration],
     }),
     DatabaseModule,
