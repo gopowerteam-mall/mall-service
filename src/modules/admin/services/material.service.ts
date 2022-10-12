@@ -6,7 +6,7 @@ import { Material } from 'src/entities/material.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
-import { IsNull, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 @Injectable()
 export class MaterialService {
@@ -85,7 +85,7 @@ export class MaterialService {
 
     const count = await this.materialRepository
       .createQueryBuilder('material')
-      .where('material.groupId IS NULL')
+      .where('material.group_id IS NULL')
       .getCount()
 
     return [
