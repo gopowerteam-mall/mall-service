@@ -74,7 +74,7 @@ export class MaterialService {
   public async findAllGroup() {
     const groups = await this.materialGroupRepository
       .createQueryBuilder('group')
-      .leftJoin(Material, 'material', 'material.groupId = group.id')
+      .leftJoin(Material, 'material', 'material.group_id = group.id')
       .select([
         'group.id as id',
         'group.name as name',
