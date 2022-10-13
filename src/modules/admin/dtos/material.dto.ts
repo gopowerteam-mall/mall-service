@@ -1,6 +1,6 @@
 import { Optional } from '@nestjs/common'
 import { ApiProperty } from '@nestjs/swagger'
-import { IsString } from 'class-validator'
+import { IsArray, IsString } from 'class-validator'
 import { pipe } from 'ramda'
 import { WhereOperator } from 'src/config/enum.config'
 import { Material } from 'src/entities/material.entity'
@@ -14,7 +14,7 @@ import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
  */
 export class CreateMaterialInput {
   @ApiProperty()
-  @IsString()
+  @IsArray()
   keys: string[]
 
   @ApiProperty({ required: false })
