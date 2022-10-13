@@ -37,11 +37,11 @@ export class Category extends pipe(
   @Column()
   recommended: boolean
 
-  @ApiProperty({ description: '父节点' })
+  @ApiProperty({ description: '父节点', type: Category })
   @TreeParent()
   parent: Category
 
-  @ApiProperty({ description: '子节点' })
+  @ApiProperty({ description: '子节点', type: Category })
   @TreeChildren()
   children: Category[]
 }

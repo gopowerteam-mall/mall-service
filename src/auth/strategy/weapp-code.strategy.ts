@@ -1,8 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport'
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { AuthService } from '../services/auth.service'
 import { Strategy } from 'passport-custom'
-import { Request } from 'express'
 
 @Injectable()
 export class WeappCodeStrategy extends PassportStrategy(
