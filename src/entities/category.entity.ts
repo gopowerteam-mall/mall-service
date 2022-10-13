@@ -41,7 +41,7 @@ export class Category extends pipe(
   @TreeParent()
   parent: Category
 
-  @ApiProperty({ description: '子节点', type: Category })
+  @ApiProperty({ description: '子节点', type: Category, isArray: true })
   @TreeChildren()
   children: Category[]
 }
