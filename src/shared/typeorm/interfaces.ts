@@ -8,7 +8,7 @@ export interface QueryInputParam<T = any> {
   order?: Record<string, Order>
   page?: PageParams
   cursor?: CursorParams
-  buildWhereQuery: (alias?: string) => Brackets
+  buildWhereQuery: () => Brackets
   buildWhereParams: () => FindOptionsWhere<T>
 }
 

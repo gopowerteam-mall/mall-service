@@ -1,5 +1,6 @@
 import { Between, Brackets, FindOptionsWhere, In, Like } from 'typeorm'
 import {
+  WHERE_OPTION_ENTITY_METADATA,
   WHERE_OPTION_METADATA,
   WHERE_OPTION_NAME_METADATA,
   WHERE_OPTION_TYPE_METADATA,
@@ -42,7 +43,7 @@ export class QueryInput<T = any> {
     return params
   }
 
-  public buildWhereQuery(alias?: string) {
+  public buildWhereQuery() {
     return new Brackets((where) => {
       Object.getOwnPropertyNames(this)
         .filter((key) => Reflect.getMetadata(WHERE_OPTION_METADATA, this, key))
@@ -60,9 +61,15 @@ export class QueryInput<T = any> {
             key,
           )
 
+          const entity = Reflect.getMetadata(
+            WHERE_OPTION_ENTITY_METADATA,
+            this,
+            key,
+          )
+
           // 添加别名支持
-          const name = alias
-            ? `${alias}.${customName || toUnderscore(key)}`
+          const name = entity
+            ? `${entity}.${customName || toUnderscore(key)}`
             : customName || toUnderscore(key)
 
           switch (type) {

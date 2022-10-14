@@ -8,9 +8,12 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator'
+import { pipe } from 'rxjs'
 import { WhereOperator } from 'src/config/enum.config'
 import { Product } from 'src/entities/product.entity'
 import { WhereOption } from 'src/shared/typeorm/decorators'
+import { OrderInput } from 'src/shared/typeorm/query/inputs/order.input'
+import { PageInput } from 'src/shared/typeorm/query/inputs/page.input'
 import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 
 export class createProductAttrItemInput {
@@ -108,7 +111,10 @@ export class CreateProductInput {
 
 export class UpdateProductInput extends PartialType(CreateProductInput) {}
 
-export class FindProductInput extends QueryInput<Product> {
+export class FindProductInput extends pipe(
+  PageInput,
+  OrderInput,
+)(QueryInput<Product>) {
   @ApiProperty({ description: '标题', required: false })
   @Optional()
   @WhereOption({ type: WhereOperator.Like })

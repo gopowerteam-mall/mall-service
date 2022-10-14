@@ -72,7 +72,7 @@ function setupSwagger(app: NestFastifyApplication) {
       .addTag('user', '用户')
       .addTag('category', '商品分类')
       .addTag('product', '商品')
-      .addTag('banner', 'Banner')
+      .addTag('home', '首页')
       .addTag('qiniu', '七牛')
       .build()
 
