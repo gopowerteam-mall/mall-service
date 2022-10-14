@@ -36,7 +36,7 @@ export class MaterialController {
 
   @Post()
   @ApiOperation({ operationId: 'createMaterial', summary: '创建素材' })
-  @ApiOkResponse({ type: Material })
+  @ApiOkResponse({ type: Material, isArray: true })
   create(@Body() { keys, group }: CreateMaterialInput) {
     return this.materialService.create(keys, group)
   }
