@@ -67,7 +67,10 @@ function setupSwagger(app: NestFastifyApplication) {
       .setTitle('Weapp接口文档')
       .setDescription('API description')
       .setVersion('1.0')
-      .addBearerAuth()
+      .addBearerAuth(
+        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+        'access-token',
+      )
       .addTag('app', '系统')
       .addTag('user', '用户')
       .addTag('category', '商品分类')
