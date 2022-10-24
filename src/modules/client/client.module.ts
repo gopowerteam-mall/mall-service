@@ -31,4 +31,4 @@ import { ProductSpec } from 'src/entities/product-spec.entity'
   controllers: [AppController, HomeController],
   providers: [AppService, BannerService, CategoryService, ProductService],
 })
-export class WeappModule {}
+export class ClientModule {}

@@ -39,7 +39,7 @@ export class AppController {
   }
 
   @Public()
-  @Get('login')
+  @Get('weapp-login')
   @ApiOperation({ operationId: 'login', summary: '用户登录' })
   @ApiOkResponse({ type: TokenResponse })
   @UseGuards(WeappCodeGuard)
@@ -54,7 +54,7 @@ export class AppController {
   }
 
   @Public()
-  @Get('token')
+  @Get('weapp-token')
   @ApiOperation({ operationId: 'token', summary: '刷新Token' })
   @ApiOkResponse({ type: TokenResponse })
   @UseGuards(RefreshTokenGuard)

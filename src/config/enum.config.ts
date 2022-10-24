@@ -32,6 +32,7 @@ export enum AdminRole {
 export enum AppOrigin {
   Admin = 'admin',
   Weapp = 'weapp',
+  App = 'app',
 }
 
 /**

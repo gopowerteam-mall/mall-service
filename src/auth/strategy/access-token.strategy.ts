@@ -40,6 +40,8 @@ export class AccessTokenStrategy extends PassportStrategy(
           return this.authService.getAdminUser(payload.id, payload.username)
         case AppOrigin.Weapp:
           return this.authService.getWeappUser(payload.id)
+        case AppOrigin.App:
+          return this.authService.getAppUser(payload.id)
       }
     }
 

@@ -8,7 +8,7 @@ import {
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { AdminModule } from './modules/admin/admin.module'
-import { WeappModule } from './modules/weapp/weapp.module'
+import { ClientModule } from './modules/client/client.module'
 import { join } from 'path'
 import { QiniuModule } from './modules/qiniu/qiniu.module'
 import { RequestContextMiddleware } from './middlewaves/request-context.middlewave'
@@ -62,9 +62,9 @@ function setupSwagger(app: NestFastifyApplication) {
   /**
    * 配置小程序Swagger接口
    */
-  function setupWeappDocument() {
-    const weappDocumentConfig = new DocumentBuilder()
-      .setTitle('Weapp接口文档')
+  function setupClientDocument() {
+    const clientDocumentConfig = new DocumentBuilder()
+      .setTitle('Client接口文档')
       .setDescription('API description')
       .setVersion('1.0')
       .addBearerAuth(
@@ -79,26 +79,26 @@ function setupSwagger(app: NestFastifyApplication) {
       .addTag('qiniu', '七牛')
       .build()
 
-    const weappDocument = SwaggerModule.createDocument(
+    const clientDocument = SwaggerModule.createDocument(
       app,
-      weappDocumentConfig,
+      clientDocumentConfig,
       {
-        include: [WeappModule, QiniuModule],
+        include: [ClientModule, QiniuModule],
       },
     )
 
-    SwaggerModule.setup('weapp/docs', app, weappDocument, {
+    SwaggerModule.setup('client/docs', app, clientDocument, {
       customCssUrl: '/swagger-ui.css',
     })
 
     // 设置OPENAPI接口地址
-    adapter.get('/weapp/api-docs', function (req, res) {
-      res.send(JSON.stringify(weappDocument))
+    adapter.get('/client/api-docs', function (req, res) {
+      res.send(JSON.stringify(clientDocument))
     })
   }
 
   setupAdminDocument()
-  setupWeappDocument()
+  setupClientDocument()
 }
 
 /**

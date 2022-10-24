@@ -239,4 +239,10 @@ export class AuthService {
       id,
     })
   }
+
+  public async getAppUser(id: string) {
+    return await this.userRepository.findOneBy({
+      id,
+    })
+  }
 }

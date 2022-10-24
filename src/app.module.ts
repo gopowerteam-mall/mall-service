@@ -5,7 +5,7 @@ import { DatabaseModule } from './database/database.module'
 import { RedisModule } from './redis/redis.module'
 import { AuthModule } from './auth/auth.module'
 import { LoggerModule } from './logger/logger.module'
-import { WeappModule } from './modules/weapp/weapp.module'
+import { ClientModule } from './modules/client/client.module'
 import { AdminModule } from './modules/admin/admin.module'
 import configuration from './config/configuration'
 import { APP_INTERCEPTOR, RouterModule } from '@nestjs/core'
@@ -24,7 +24,7 @@ const environment = process.env.NODE_ENV || 'development'
     RedisModule,
     AuthModule,
     LoggerModule,
-    WeappModule,
+    ClientModule,
     AdminModule,
     QiniuModule,
     RouterModule.register([
@@ -33,8 +33,8 @@ const environment = process.env.NODE_ENV || 'development'
         module: AdminModule,
       },
       {
-        path: 'weapp',
-        module: WeappModule,
+        path: 'client',
+        module: ClientModule,
       },
     ]),
   ],
