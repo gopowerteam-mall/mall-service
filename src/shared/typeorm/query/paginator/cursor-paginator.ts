@@ -21,7 +21,7 @@ export interface CursorPaginationOptions<Entity> {
   orderKey?: string
 }
 
-export interface PagingResult<Entity> {
+export interface CursorPagingResult<Entity> {
   data: Entity[]
   cursor?: string
   finished: boolean
@@ -60,7 +60,7 @@ export class CursorPaginator<Entity> {
 
   public async paginate(
     builder: SelectQueryBuilder<Entity>,
-  ): Promise<PagingResult<Entity>> {
+  ): Promise<CursorPagingResult<Entity>> {
     const entities = await this.appendPagingQuery(builder).getMany()
     const finished = entities.length > this.limit
 
@@ -176,7 +176,7 @@ export class CursorPaginator<Entity> {
   private toPagingResult<Entity>(
     entities: Entity[],
     finished: boolean,
-  ): PagingResult<Entity> {
+  ): CursorPagingResult<Entity> {
     const [last] = [...(entities || [])].reverse()
 
     return {

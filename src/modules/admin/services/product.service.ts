@@ -11,7 +11,7 @@ import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { DataSource, Repository } from 'typeorm'
 import {
-  createProductAttrInput,
+  CreateProductAttrInput,
   createProductSpecInput,
 } from '../dtos/product.dto'
 
@@ -115,7 +115,7 @@ export class ProductService {
   /**
    * 创建商品属性
    */
-  public createProductAttr(attr: createProductAttrInput) {
+  public createProductAttr(attr: CreateProductAttrInput) {
     const items = attr.items.map((item) =>
       this.productAttrItemRepository.create(item),
     )

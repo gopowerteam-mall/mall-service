@@ -1,37 +1,24 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 import { BaseEntity } from 'typeorm'
-import { CursorParams } from '../query/params/cursor-params'
+import { CursorPagingResult } from '../query/paginator/cursor-paginator'
 
-export const CursorResponse = (entity: new (...args: any[]) => BaseEntity) => {
-  return {
-    schema: {
-      allOf: [
-        { $ref: getSchemaPath(Pageable) },
-        {
-          properties: {
-            content: {
-              type: 'array',
-              items: { $ref: getSchemaPath(entity) },
-            },
-          },
-        },
-      ],
-    },
+export function toCursorResponse(entity: new (...args: any[]) => BaseEntity) {
+  type Entity = typeof entity
+  class CursorBaseClass implements CursorPagingResult<Entity> {
+    @ApiProperty()
+    public cursor: string
+
+    @ApiProperty()
+    public finished: boolean
+
+    @ApiProperty({ type: entity, isArray: true })
+    public data: Entity[]
   }
-}
 
-export class Pageable<T> {
-  @ApiProperty()
-  public cursor: string
+  const fun = new Function(
+    'base',
+    `return class Cursor${entity.name} extends base{}`,
+  )
 
-  @ApiProperty()
-  public finished: boolean
-
-  public content: T[]
-
-  constructor(data: T[], cursor: CursorParams, finished: boolean) {
-    this.content = data
-    this.finished = finished
-    this.cursor = cursor.cursor
-  }
+  return fun(CursorBaseClass)
 }

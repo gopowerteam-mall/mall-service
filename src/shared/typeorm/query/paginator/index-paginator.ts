@@ -14,7 +14,7 @@ export interface IndexPaginationOptions<Entity> {
   query?: IndexPagingQuery
 }
 
-export interface PagingResult<Entity> {
+export interface IndexPagingResult<Entity> {
   data: Entity[]
   total: number
 }
@@ -43,7 +43,7 @@ export class IndexPaginator<Entity> {
 
   public async paginate(
     builder: SelectQueryBuilder<Entity>,
-  ): Promise<PagingResult<Entity>> {
+  ): Promise<IndexPagingResult<Entity>> {
     const [entities, count] = await this.appendPagingQuery(
       builder,
     ).getManyAndCount()
@@ -83,7 +83,7 @@ export class IndexPaginator<Entity> {
   private toPagingResult<Entity>(
     entities: Entity[],
     total: number,
-  ): PagingResult<Entity> {
+  ): IndexPagingResult<Entity> {
     return {
       data: entities,
       total,

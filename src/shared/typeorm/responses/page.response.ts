@@ -1,41 +1,22 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
+import { ApiProperty } from '@nestjs/swagger'
 import { BaseEntity } from 'typeorm'
-import { PageParams } from '../query/params/page-params'
+import { IndexPagingResult } from '../query/paginator/index-paginator'
 
-export const PageResponse = (entity: new (...args: any[]) => BaseEntity) => {
-  return {
-    schema: {
-      allOf: [
-        { $ref: getSchemaPath(Pageable) },
-        {
-          properties: {
-            content: {
-              type: 'array',
-              items: { $ref: getSchemaPath(entity) },
-            },
-          },
-        },
-      ],
-    },
+export function toPageResponse(entity: new (...args: any[]) => BaseEntity) {
+  type Entity = typeof entity
+
+  class PageBaseClass implements IndexPagingResult<Entity> {
+    @ApiProperty()
+    public total: number
+
+    @ApiProperty({ type: entity, isArray: true })
+    public data: Entity[]
   }
-}
 
-export class Pageable<T> {
-  @ApiProperty()
-  public pageIndex: number
+  const fun = new Function(
+    'base',
+    `return class Page${entity.name} extends base{}`,
+  )
 
-  @ApiProperty()
-  public pageSize: number
-
-  @ApiProperty()
-  public totalElements: number
-
-  public content: T[]
-
-  constructor(data: T[], count: number, page: PageParams) {
-    this.content = data
-    this.totalElements = count
-    this.pageIndex = page.page
-    this.pageSize = page.size
-  }
+  return fun(PageBaseClass)
 }

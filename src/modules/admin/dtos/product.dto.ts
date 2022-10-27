@@ -31,7 +31,7 @@ export class createProductAttrItemInput {
   image: string
 }
 
-export class createProductAttrInput {
+export class CreateProductAttrInput {
   @ApiProperty({ description: '属性名称' })
   @IsString()
   name: string
@@ -94,11 +94,11 @@ export class CreateProductInput {
 
   @ApiProperty({
     description: '属性',
-    type: createProductAttrInput,
+    type: CreateProductAttrInput,
     isArray: true,
   })
-  @Type(() => createProductAttrInput)
-  attrs: createProductAttrInput[]
+  @Type(() => CreateProductAttrInput)
+  attrs: CreateProductAttrInput[]
 
   @ApiProperty({
     description: '规格项',

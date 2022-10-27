@@ -19,9 +19,11 @@ import {
 } from '@nestjs/swagger'
 import { omit } from 'ramda'
 import { AuthService } from 'src/auth/services/auth.service'
+import { Public } from 'src/decorators/public.decorator'
 import { RequestUser } from 'src/decorators/request-user.decorator'
 import { Administrator } from 'src/entities/administrator.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
+import { toPageResponse } from 'src/shared/typeorm/responses/page.response'
 import {
   CreateAdministratorInput,
   UpdatePasswordInput,
@@ -62,9 +64,10 @@ export class AdministratorController {
     return this.administratorService.update(id, updateAdministratorInput)
   }
 
+  @Public() // TODO: 测试分页数据
   @Get()
   @ApiOperation({ operationId: 'findAdministrator', summary: '查询管理员列表' })
-  @ApiOkResponse({ type: Administrator, isArray: true })
+  @ApiOkResponse({ type: toPageResponse(Administrator) })
   findAll(@Query() input: FindAdministratorInput) {
     return this.administratorService.findAll(input.params)
   }
