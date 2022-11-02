@@ -26,6 +26,7 @@ export class HomeController {
     private readonly productService: ProductService,
   ) {}
 
+  @Public()
   @Get('get-banner-list')
   @ApiOperation({ operationId: 'getBannerList', summary: '获取Banner列表' })
   @ApiOkResponse({ type: Banner, isArray: true })
@@ -33,6 +34,7 @@ export class HomeController {
     return this.bannerService.findAll()
   }
 
+  @Public()
   @Get('get-category-list')
   @ApiOperation({ operationId: 'getCategoryList', summary: '获取推荐标签列表' })
   @ApiOkResponse({ type: Category, isArray: true })
@@ -43,6 +45,7 @@ export class HomeController {
     return this.categoryService.findAll(input.params)
   }
 
+  @Public()
   @Get('get-recommend-list')
   @ApiOperation({
     operationId: 'getRecommendList',
