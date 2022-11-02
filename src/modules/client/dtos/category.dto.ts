@@ -11,7 +11,7 @@ export class FindCategoryInput extends QueryInput<Category> {
   @Optional()
   @WhereOption({ type: WhereOperator.Equal, entity: 'category' })
   @Transform(({ obj, key }) => {
-    return obj[key] === 'true'
+    return obj[key] === 'true' || obj[key] === true
   })
   recommended: boolean
 }
