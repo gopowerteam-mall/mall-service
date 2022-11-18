@@ -63,8 +63,18 @@ export class ProductService {
   /**
    * 查询商品详情
    */
-  public findOne() {
-    return
+  public findOne(id: string) {
+    const builder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.attrs', 'attrs')
+      .leftJoinAndSelect('attrs.items', 'items')
+      .leftJoinAndSelect('product.specs', 'specs')
+
+    builder.andWhere(`product.id = :id`, {
+      id,
+    })
+
+    return builder.getOne()
   }
 
   /**

@@ -43,8 +43,8 @@ export class ProductController {
   @Get(':id')
   @ApiOperation({ operationId: 'getProduct', summary: '获取商品' })
   @ApiOkResponse({ type: Product })
-  findOne(@Param() {}: IdInput) {
-    return
+  findOne(@Param() { id }: IdInput) {
+    return this.productService.findOne(id)
   }
 
   @Post()
