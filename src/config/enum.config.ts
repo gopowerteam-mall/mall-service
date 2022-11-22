@@ -54,3 +54,25 @@ export enum FileType {
   Document = 'DOCUMENT',
   Other = 'OTHER',
 }
+
+/**
+ * 商品订单状态
+ */
+export enum ProductOrderState {
+  Pending = 'PENDING', // 待支付
+  Processing = 'PROCESSING', // 进行中
+  Finished = 'FINISHED', // 已完成
+  Expired = 'EXPIRED', // 已过期
+  Refunded = 'REFUNDED', // 已退款
+  Closed = 'CLOSED', // 已关闭
+}
+
+/**
+ * 支付订单状态
+ */
+export enum PaymentOrderState {
+  Pending = 'PENDING', // 待支付
+  Paid = 'PAID', // 已支付
+  Expired = 'EXPIRED', // 已过期
+  Refunded = 'REFUNDED', // 已退款
+}
