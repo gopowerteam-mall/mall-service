@@ -23,8 +23,13 @@ import { Product } from 'src/entities/product.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductSpec } from 'src/entities/product-spec.entity'
-import { ProductController } from './controllers/product.controller';
-import { ProductService } from './services/product.service';
+import { ProductController } from './controllers/product.controller'
+import { ProductService } from './services/product.service'
+import { OrderController } from './controllers/order.controller'
+import { OrderService } from './services/order.service'
+import { ProductOrder } from 'src/entities/product-order.entity'
+import { ProductOrderItem } from 'src/entities/product-order-item.entity'
+import { PaymentOrder } from 'src/entities/payment-order.entity'
 
 @Module({
   imports: [
@@ -41,6 +46,9 @@ import { ProductService } from './services/product.service';
       ProductAttr,
       ProductAttrItem,
       ProductSpec,
+      ProductOrder,
+      ProductOrderItem,
+      PaymentOrder,
     ]),
   ],
   providers: [
@@ -50,6 +58,7 @@ import { ProductService } from './services/product.service';
     CategoryService,
     MaterialService,
     ProductService,
+    OrderService,
   ],
   controllers: [
     AdministratorController,
@@ -59,6 +68,7 @@ import { ProductService } from './services/product.service';
     CategoryController,
     MaterialController,
     ProductController,
+    OrderController,
   ],
 })
 export class AdminModule {}

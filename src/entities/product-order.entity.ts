@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm'
+import { Entity, Column, OneToMany, OneToOne } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -25,14 +25,19 @@ export class ProductOrder extends pipe(
   @Column({ enum: ProductOrderState })
   state: ProductOrderState
 
-  @ApiProperty({ description: '所属商品' })
-  @OneToMany(() => ProductOrderItem, (item) => item.order)
+  @ApiProperty({
+    description: '所属商品',
+    isArray: true,
+    type: ProductOrderItem,
+  })
+  @OneToMany(() => ProductOrderItem, (item) => item.productOrder)
   items: ProductOrderItem[]
 
   @ApiProperty({ description: '订单金额' })
+  @Column()
   price: number
 
-  @ApiProperty({ description: '支付订单' })
-  @ManyToOne(() => PaymentOrder, (item) => item.orders)
+  @ApiProperty({ description: '支付订单', type: () => PaymentOrder })
+  @OneToOne(() => PaymentOrder)
   paymentOrder: PaymentOrder
 }

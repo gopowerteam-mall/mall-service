@@ -36,7 +36,7 @@ function setupSwagger(app: NestFastifyApplication) {
       .addTag('user', '用户')
       .addTag('banner', 'Banner')
       .addTag('material', '素材')
-
+      .addTag('order', '订单')
       .addTag('qiniu', '七牛')
 
       .build()

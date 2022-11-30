@@ -19,7 +19,7 @@ export class ProductSpec extends pipe(
   EntityWithCreator,
   EntityWithOperator,
 )(EntityClass) {
-  @ApiProperty({ description: '删除' })
+  @ApiProperty({ description: '删除', type: () => Product })
   @ManyToOne(() => Product)
   product: Product
 
