@@ -57,27 +57,26 @@ export class Product extends pipe(
   @JoinColumn({ name: 'category_id' })
   category: Category
 
-  @ApiProperty({ description: '属性' })
-  @OneToMany(() => ProductAttr, (attr) => attr.product)
-  attrs: ProductAttr[]
-
-  @ApiProperty({ description: '规格项' })
-  @OneToMany(() => ProductSpec, (spec) => spec.product)
-  specs: ProductSpec[]
-
   @ApiProperty({
-    description: '配置版本',
+    description: '所有商品配置',
   })
   @OneToMany(() => ProductVersion, (version) => version.product)
   version: ProductVersion[]
 
   @ApiProperty({ description: '最低价' })
   get minPrice() {
-    return Math.min(...this.specs.map((spec) => spec.price))
+    return Math.min(...this.property.specs.map((spec) => spec.price))
   }
 
   @ApiProperty({ description: '最高价' })
   get maxPrice() {
-    return Math.max(...this.specs.map((spec) => spec.price))
+    return Math.max(...this.property.specs.map((spec) => spec.price))
+  }
+
+  @ApiProperty({ description: '当前商品配置' })
+  get property() {
+    return this.version
+      .sort((x, y) => x.version - y.version)
+      .find((version) => version.enable)
   }
 }

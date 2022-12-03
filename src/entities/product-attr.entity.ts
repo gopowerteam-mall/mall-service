@@ -9,8 +9,8 @@ import {
 import { ApiProperty } from '@nestjs/swagger'
 import { EntityWithCreator } from 'src/shared/typeorm/entity/entity-with-creator'
 import { EntityWithOperator } from 'src/shared/typeorm/entity/entity-with-operator'
-import { Product } from './product.entity'
 import { ProductAttrItem } from './product-attr-item.entity'
+import { ProductVersion } from './product-version.entity'
 
 @Entity('product-attr')
 export class ProductAttr extends pipe(
@@ -28,9 +28,9 @@ export class ProductAttr extends pipe(
   @Column()
   primary: boolean
 
-  @ApiProperty({ description: '所属商品' })
-  @ManyToOne(() => Product, (product) => product.attrs)
-  product: Product
+  @ApiProperty({ description: '所属商品版本' })
+  @ManyToOne(() => ProductVersion, (version) => version.attrs)
+  version: ProductVersion
 
   @ApiProperty({ description: '属性项' })
   @OneToMany(() => ProductAttrItem, (item) => item.attr)

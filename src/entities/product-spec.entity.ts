@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -10,6 +10,8 @@ import { ApiProperty } from '@nestjs/swagger'
 import { EntityWithCreator } from 'src/shared/typeorm/entity/entity-with-creator'
 import { EntityWithOperator } from 'src/shared/typeorm/entity/entity-with-operator'
 import { Product } from './product.entity'
+import { ProductVersion } from './product-version.entity'
+import { ProductAttrItem } from './product-attr-item.entity'
 
 @Entity('product-spec')
 export class ProductSpec extends pipe(
@@ -20,12 +22,13 @@ export class ProductSpec extends pipe(
   EntityWithOperator,
 )(EntityClass) {
   @ApiProperty({ description: '删除' })
-  @ManyToOne(() => Product)
-  product: Product
+  @ManyToOne(() => ProductVersion, (productVersion) => productVersion.specs)
+  version: ProductVersion
 
   @ApiProperty({ description: '属性项组合' })
-  @Column({ type: 'text', array: true })
-  items: string[]
+  @ManyToMany(() => ProductAttrItem)
+  @JoinTable()
+  items: ProductAttrItem[]
 
   @ApiProperty()
   @Column()

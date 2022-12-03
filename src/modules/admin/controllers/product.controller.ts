@@ -30,8 +30,8 @@ import { ProductService } from '../services/product.service'
 export class ProductController {
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService,
-  ) {}
+  ) // private categoryService: CategoryService,
+  {}
 
   @Get()
   @ApiOperation({ operationId: 'findProduct', summary: '查询商品' })
@@ -51,24 +51,20 @@ export class ProductController {
   @ApiOperation({ operationId: 'createProduct', summary: '创建商品' })
   @ApiOkResponse({ type: Product })
   async create(@Body() input: CreateProductInput) {
-    const { attrs, specs, categoryId, ...product } = input
-
-    const productAttrs = attrs.map((attr) =>
-      this.productService.createProductAttr(attr),
-    )
-
-    const productSpecs = specs.map((spec) =>
-      this.productService.createProductSpec(spec),
-    )
-
-    const category = await this.categoryService.findOne(categoryId)
-
-    return this.productService.create(
-      product,
-      category,
-      productAttrs,
-      productSpecs,
-    )
+    // const { attrs, specs, categoryId, ...product } = input
+    // const productAttrs = attrs.map((attr) =>
+    //   this.productService.createProductAttr(attr),
+    // )
+    // const productSpecs = specs.map((spec) =>
+    //   this.productService.createProductSpec(spec),
+    // )
+    // const category = await this.categoryService.findOne(categoryId)
+    // return this.productService.create(
+    //   product,
+    //   category,
+    //   productAttrs,
+    //   productSpecs,
+    // )
   }
 
   @Put(':id')

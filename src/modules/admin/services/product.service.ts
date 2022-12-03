@@ -39,42 +39,37 @@ export class ProductService {
     page,
     order,
   }: QueryInputParam<Product>) {
-    const builder = this.productRepository
-      .createQueryBuilder('product')
-      .leftJoinAndSelect('product.attrs', 'attrs')
-      .leftJoinAndSelect('attrs.items', 'items')
-      .leftJoinAndSelect('product.specs', 'specs')
-
-    builder.andWhere(buildWhereQuery())
-
-    const paginator = buildPaginator({
-      mode: PaginatorMode.Index,
-      entity: Product,
-      query: {
-        order: order,
-        skip: page.skip,
-        limit: page.limit,
-      },
-    })
-
-    return paginator.paginate(builder)
+    // const builder = this.productRepository
+    //   .createQueryBuilder('product')
+    //   .leftJoinAndSelect('product.attrs', 'attrs')
+    //   .leftJoinAndSelect('attrs.items', 'items')
+    //   .leftJoinAndSelect('product.specs', 'specs')
+    // builder.andWhere(buildWhereQuery())
+    // const paginator = buildPaginator({
+    //   mode: PaginatorMode.Index,
+    //   entity: Product,
+    //   query: {
+    //     order: order,
+    //     skip: page.skip,
+    //     limit: page.limit,
+    //   },
+    // })
+    // return paginator.paginate(builder)
   }
 
   /**
    * 查询商品详情
    */
   public findOne(id: string) {
-    const builder = this.productRepository
-      .createQueryBuilder('product')
-      .leftJoinAndSelect('product.attrs', 'attrs')
-      .leftJoinAndSelect('attrs.items', 'items')
-      .leftJoinAndSelect('product.specs', 'specs')
-
-    builder.andWhere(`product.id = :id`, {
-      id,
-    })
-
-    return builder.getOne()
+    // const builder = this.productRepository
+    //   .createQueryBuilder('product')
+    //   .leftJoinAndSelect('product.attrs', 'attrs')
+    //   .leftJoinAndSelect('attrs.items', 'items')
+    //   .leftJoinAndSelect('product.specs', 'specs')
+    // builder.andWhere(`product.id = :id`, {
+    //   id,
+    // })
+    // return builder.getOne()
   }
 
   /**
@@ -87,23 +82,19 @@ export class ProductService {
     attrs: ProductAttr[],
     specs: ProductSpec[],
   ) {
-    // 保存图片
-    await this.saveProductImages(productInput)
-
-    // 创建商品
-    const product = this.productRepository.create({
-      ...productInput,
-      category,
-    })
-
-    await this.dataSource.manager.transaction(async (manager) => {
-      attrs.forEach(async ({ items }) => await manager.save(items))
-
-      product.attrs = await manager.save(attrs)
-      product.specs = await manager.save(specs)
-
-      return await manager.save(product, { reload: true })
-    })
+    // // 保存图片
+    // await this.saveProductImages(productInput)
+    // // 创建商品
+    // const product = this.productRepository.create({
+    //   ...productInput,
+    //   category,
+    // })
+    // await this.dataSource.manager.transaction(async (manager) => {
+    //   attrs.forEach(async ({ items }) => await manager.save(items))
+    //   product.attrs = await manager.save(attrs)
+    //   product.specs = await manager.save(specs)
+    //   return await manager.save(product, { reload: true })
+    // })
   }
 
   /**
@@ -126,24 +117,27 @@ export class ProductService {
    * 创建商品属性
    */
   public createProductAttr(attr: CreateProductAttrInput) {
-    const items = attr.items.map((item) =>
-      this.productAttrItemRepository.create(item),
-    )
-
-    return this.productAttrRepository.create({
-      name: attr.name,
-      primary: attr.primary,
-      items,
-    })
+    // const items = attr.items.map((item) =>
+    //   this.productAttrItemRepository.create(item),
+    // )
+    // return this.productAttrRepository.create({
+    //   name: attr.name,
+    //   primary: attr.primary,
+    //   items,
+    // })
   }
 
   /**
    * 创建商品Spec
    */
   public createProductSpec(spac: createProductSpecInput) {
-    return this.productSpecRepository.create(spac)
+    // return this.productSpecRepository.create(spac)
   }
 
+  /**
+   * 保存产品图片
+   * @param product
+   */
   private async saveProductImages(product: Partial<Product>) {
     // 保存图片封面
     if (product.cover) {
