@@ -25,7 +25,7 @@ export class Banner extends pipe(
   @Column()
   image: string
 
-  @ApiProperty({ description: 'Banner类型', enum: BannerType })
+  @ApiProperty({ description: 'Banner类型' })
   @Column({ enum: BannerType })
   type: BannerType
 

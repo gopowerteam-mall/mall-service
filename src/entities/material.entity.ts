@@ -24,15 +24,15 @@ export class Material extends pipe(
   @Column({ unique: true })
   key: string
 
-  @ApiProperty({ description: '素材类型', enum: FileType })
+  @ApiProperty({ description: '素材类型' })
   @Column({ enum: FileType })
   type: FileType
 
-  @ApiProperty({ description: '来源', enum: AppOrigin })
+  @ApiProperty({ description: '来源' })
   @Column({ enum: AppOrigin })
   origin: AppOrigin
 
-  @ApiProperty({ description: '分组', enum: AppOrigin })
+  @ApiProperty({ description: '分组' })
   @ManyToOne(() => MaterialGroup, { nullable: true })
   @JoinColumn({
     name: 'group_id',

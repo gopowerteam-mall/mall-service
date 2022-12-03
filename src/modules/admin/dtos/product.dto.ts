@@ -115,21 +115,21 @@ export class FindProductInput extends pipe(
   PageInput,
   OrderInput,
 )(QueryInput<Product>) {
-  @ApiProperty({ description: '标题', required: false })
+  @ApiProperty({ description: '标题' })
   @Optional()
   @WhereOption({ type: WhereOperator.Like })
-  title: string
+  title?: string
 
-  @ApiProperty({ description: '分类', required: false })
+  @ApiProperty({ description: '分类' })
   @Optional()
   @WhereOption({ name: 'category_id', type: WhereOperator.Equal })
-  category: string
+  category?: string
 
-  @ApiProperty({ description: '是否推荐', required: false })
+  @ApiProperty({ description: '是否推荐' })
   @Optional()
   @WhereOption({ type: WhereOperator.Equal })
   @Transform(({ obj, key }) => {
     return obj[key] === 'true'
   })
-  recommended: boolean
+  recommended?: boolean
 }

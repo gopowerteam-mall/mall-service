@@ -27,8 +27,6 @@ export class ProductOrder extends pipe(
 
   @ApiProperty({
     description: '所属商品',
-    isArray: true,
-    type: ProductOrderItem,
   })
   @OneToMany(() => ProductOrderItem, (item) => item.productOrder)
   items: ProductOrderItem[]
@@ -37,7 +35,7 @@ export class ProductOrder extends pipe(
   @Column()
   price: number
 
-  @ApiProperty({ description: '支付订单', type: () => PaymentOrder })
+  @ApiProperty({ description: '支付订单' })
   @OneToOne(() => PaymentOrder)
   paymentOrder: PaymentOrder
 }

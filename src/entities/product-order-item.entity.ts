@@ -42,14 +42,14 @@ export class ProductOrderItem extends pipe(
   /**
    * 商品订单
    */
-  @ApiProperty({ description: '商品订单', type: () => ProductOrder })
+  @ApiProperty({ description: '商品订单' })
   @ManyToOne(() => ProductOrder, (order) => order.items)
   productOrder: ProductOrder
 
   /**
    * 商品SKU
    */
-  @ApiProperty({ description: '商品Spec', type: () => ProductSpec })
+  @ApiProperty({ description: '商品Spec' })
   @OneToOne(() => ProductSpec)
   productSpec: ProductSpec
 }

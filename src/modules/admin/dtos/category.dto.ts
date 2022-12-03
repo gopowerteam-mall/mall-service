@@ -8,47 +8,46 @@ import { WhereOption } from 'src/shared/typeorm/decorators'
 import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 
 export class CreateCategoryInput {
-  @ApiProperty({ description: '标题', required: true })
+  @ApiProperty({ description: '标题' })
   @IsString()
   title: string
 
-  @ApiProperty({ description: '分类图片', required: false })
+  @ApiProperty({ description: '分类图片' })
   @ValidateIf((category) => !!category.recommended)
   @IsNotEmpty()
-  image: string
+  image?: string
 
-  @ApiProperty({ description: '是否推荐', required: true })
+  @ApiProperty({ description: '是否推荐' })
   @IsBoolean()
   recommended: boolean
 
-  @ApiProperty({ description: '父ID', required: false })
+  @ApiProperty({ description: '父ID' })
   @Optional()
-  parentId: string
+  parentId?: string
 }
 
 export class UpdateCategoryInput extends PartialType(CreateCategoryInput) {}
 
 export class FindCategoryInput extends QueryInput<Category> {
-  @ApiProperty({ description: '标题', required: false })
+  @ApiProperty({ description: '标题' })
   @Optional()
   @WhereOption({ type: WhereOperator.Like })
-  title: string
+  title?: string
 
-  @ApiProperty({ description: '是否推荐', required: false })
+  @ApiProperty({ description: '是否推荐' })
   @Optional()
   @WhereOption({ type: WhereOperator.Equal })
   @Transform(({ obj, key }) => {
     return obj[key] === 'true'
   })
-  recommended: boolean
+  recommended?: boolean
 
   @ApiProperty({
     description: '是否包含子元素',
-    required: false,
   })
   @Optional()
   @Transform(({ obj, key }) => {
     return obj[key] === 'true'
   })
-  recursion: boolean
+  recursion?: boolean
 }

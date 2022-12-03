@@ -16,7 +16,7 @@ class SubmitOrderItemInput {
  * 提交订单
  */
 export class SubmitOrderInput {
-  @ApiProperty({ isArray: true, type: SubmitOrderItemInput })
+  @ApiProperty({ description: '提交订单项' })
   @Type(() => SubmitOrderItemInput)
   items: SubmitOrderItemInput[]
 }

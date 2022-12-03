@@ -20,14 +20,14 @@ export class PaymentOrder extends pipe(
   EntityWithCreator,
   EntityWithOperator,
 )(EntityClass) {
-  @ApiProperty({ description: '商品订单', type: () => ProductOrder })
+  @ApiProperty({ description: '商品订单' })
   @OneToOne(() => ProductOrder)
   productOrder: ProductOrder
 
   @ApiProperty({ description: '订单金额' })
   price: number
 
-  @ApiProperty({ description: '支付订单状态', enum: PaymentOrderState })
+  @ApiProperty({ description: '支付订单状态' })
   @Column({ enum: PaymentOrderState })
   state: PaymentOrderState
 }

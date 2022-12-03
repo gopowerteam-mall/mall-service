@@ -30,6 +30,7 @@ import { OrderService } from './services/order.service'
 import { ProductOrder } from 'src/entities/product-order.entity'
 import { ProductOrderItem } from 'src/entities/product-order-item.entity'
 import { PaymentOrder } from 'src/entities/payment-order.entity'
+import { ProductVersion } from 'src/entities/product-version.entity'
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { PaymentOrder } from 'src/entities/payment-order.entity'
       Material,
       MaterialGroup,
       Product,
+      ProductVersion,
       ProductAttr,
       ProductAttrItem,
       ProductSpec,

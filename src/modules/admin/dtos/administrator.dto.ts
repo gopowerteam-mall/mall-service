@@ -51,12 +51,12 @@ export class FindAdministratorInput extends pipe(
   PageInput,
   OrderInput,
 )(QueryInput<Administrator>) {
-  @ApiProperty({ required: false, description: '姓名(模糊查询)' })
+  @ApiProperty({ description: '姓名(模糊查询)' })
   @IsOptional()
   @WhereOption({ type: WhereOperator.Like })
   realname?: string
 
-  @ApiProperty({ required: false, description: '用户名(模糊查询)' })
+  @ApiProperty({ description: '用户名(模糊查询)' })
   @IsOptional()
   @WhereOption({ type: WhereOperator.Like })
   username?: string

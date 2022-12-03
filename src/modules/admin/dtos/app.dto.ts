@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger'
 import { Length } from 'class-validator'
 
 class AdministratorInput {
-  @ApiProperty()
+  @ApiProperty({ description: '用户名' })
   @Length(5, 20)
   username: string
 
-  @ApiProperty()
+  @ApiProperty({ description: '密码' })
   @Length(6, 20)
   password: string
 }
@@ -15,12 +15,11 @@ class AdministratorInput {
  * 设置初始化管理员
  */
 export class AppInitInput {
-  @ApiProperty()
   administrator: AdministratorInput
 }
 
 export class AppBaseInput {
-  @ApiProperty()
+  @ApiProperty({ description: '基础时间' })
   basetime: number
 }
 
@@ -28,11 +27,11 @@ export class AppBaseInput {
  * 登录
  */
 export class LoginInput {
-  @ApiProperty()
+  @ApiProperty({ description: '用户名' })
   @Length(5, 20)
   username: string
 
-  @ApiProperty()
+  @ApiProperty({ description: '密码' })
   @Length(6, 20)
   password: string
 }

@@ -10,14 +10,14 @@ import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
  * 添加Banner
  */
 export class CreateBannerInput {
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: 'Banner标题' })
   @Optional()
-  title: string
+  title?: string
 
   @ApiProperty({ description: 'Banner图片' })
   image: string
 
-  @ApiProperty({ description: 'Banner类型', enum: BannerType })
+  @ApiProperty({ description: 'Banner类型' })
   @IsEnum(BannerType)
   type: BannerType
 

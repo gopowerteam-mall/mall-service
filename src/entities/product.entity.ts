@@ -13,6 +13,7 @@ import { EntityWithCreator } from 'src/shared/typeorm/entity/entity-with-creator
 import { Category } from './category.entity'
 import { ProductAttr } from './product-attr.entity'
 import { ProductSpec } from './product-spec.entity'
+import { ProductVersion } from './product-version.entity'
 
 @Entity('product')
 export class Product extends pipe(
@@ -63,6 +64,12 @@ export class Product extends pipe(
   @ApiProperty({ description: '规格项' })
   @OneToMany(() => ProductSpec, (spec) => spec.product)
   specs: ProductSpec[]
+
+  @ApiProperty({
+    description: '配置版本',
+  })
+  @OneToMany(() => ProductVersion, (version) => version.product)
+  version: ProductVersion[]
 
   @ApiProperty({ description: '最低价' })
   get minPrice() {

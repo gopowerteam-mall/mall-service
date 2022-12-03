@@ -29,17 +29,17 @@ export class FindMaterialInput extends pipe(
   PageInput,
   OrderInput,
 )(QueryInput<Material>) {
-  @ApiProperty({ required: false })
+  @ApiProperty({ description: '分组ID' })
   @Optional()
   @WhereOption({ name: 'group_id', type: WhereOperator.Equal })
-  group: string
+  group?: string
 }
 
 /**
  * 查询MaterialGroup
  */
 export class CreateMaterialGroupInput {
-  @ApiProperty()
+  @ApiProperty({ description: '素材名称' })
   @IsString()
   name: string
 }
@@ -48,7 +48,7 @@ export class CreateMaterialGroupInput {
  * 更新MaterialGroup
  */
 export class UpdateMaterialGroupInput {
-  @ApiProperty()
+  @ApiProperty({ description: '素材名称' })
   @IsString()
   name: string
 }
@@ -59,5 +59,5 @@ export class UpdateMaterialGroupInput {
 export class DeleteMaterialGroupInput {
   @ApiProperty({ description: '删除后移动到的目标分组ID' })
   @Optional()
-  target: string
+  target?: string
 }
