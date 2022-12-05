@@ -61,7 +61,7 @@ export class Product extends pipe(
     description: '所有商品配置',
   })
   @OneToMany(() => ProductVersion, (version) => version.product)
-  version: ProductVersion[]
+  versions: ProductVersion[]
 
   @ApiProperty({ description: '最低价' })
   get minPrice() {
@@ -75,7 +75,7 @@ export class Product extends pipe(
 
   @ApiProperty({ description: '当前商品配置' })
   get property() {
-    return this.version
+    return this.versions
       .sort((x, y) => x.version - y.version)
       .find((version) => version.enable)
   }

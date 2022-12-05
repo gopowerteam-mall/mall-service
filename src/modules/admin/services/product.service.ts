@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
+import { where } from 'ramda'
 import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
 import { ProductSpec } from 'src/entities/product-spec.entity'
+import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
@@ -26,6 +28,8 @@ export class ProductService {
     private readonly productAttrItemRepository: Repository<ProductAttrItem>,
     @InjectRepository(ProductSpec)
     private readonly productSpecRepository: Repository<ProductSpec>,
+    @InjectRepository(ProductVersion)
+    private readonly productVersionRepository: Repository<ProductVersion>,
     @InjectDataSource()
     private dataSource: DataSource,
     private fileService: FileService,
@@ -76,41 +80,83 @@ export class ProductService {
    * 创建商品
    * @returns
    */
-  public async create(
-    productInput: Partial<Product>,
-    category: Category,
-    attrs: ProductAttr[],
-    specs: ProductSpec[],
-  ) {
-    // // 保存图片
-    // await this.saveProductImages(productInput)
-    // // 创建商品
-    // const product = this.productRepository.create({
-    //   ...productInput,
-    //   category,
-    // })
-    // await this.dataSource.manager.transaction(async (manager) => {
-    //   attrs.forEach(async ({ items }) => await manager.save(items))
-    //   product.attrs = await manager.save(attrs)
-    //   product.specs = await manager.save(specs)
-    //   return await manager.save(product, { reload: true })
-    // })
+  public async create(input: Partial<Product>, category: Category) {
+    // 保存相关图片
+    await this.saveProductImages(input)
+    // 创建商品
+    return this.productRepository.create({
+      ...input,
+      category,
+      enable: false, // 创建商品不会自动上架
+    })
   }
 
   /**
    * 更新商品
    * @returns
    */
-  public update() {
-    return
+  public async update(
+    id: string,
+    input: Partial<Product>,
+    category?: Category,
+  ) {
+    if (category) {
+      input.category = category
+    }
+
+    // 更新相关图片
+    await this.saveProductImages(input)
+
+    return this.productRepository.update(id, input)
   }
 
   /**
-   * 删除商品
+   * 商品上架操作
    * @returns
    */
-  public delete() {
-    return
+  public async publish(id: string, versionId) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+      relations: { versions: true },
+    })
+
+    // 待下架商品配置
+    const unpublishVersion = product.versions.find(
+      (x) => x.enable === true && x.id !== versionId,
+    )
+
+    // 待上架商品配置
+    const publishVersion = product.versions.find((x) => x.id === versionId)
+
+    if (!publishVersion) {
+      throw new Error('无法找到相应配置版本')
+    }
+
+    await this.dataSource.manager.transaction(async (manager) => {
+      // 上架商品
+      if (!product.enable) {
+        product.enable = true
+        await manager.save(unpublishVersion)
+      }
+
+      if (unpublishVersion) {
+        unpublishVersion.enable = false
+        await manager.save(unpublishVersion)
+      }
+
+      if (publishVersion) {
+        publishVersion.enable = true
+        await manager.save(unpublishVersion)
+      }
+    })
+  }
+
+  /**
+   * 商品下架操作
+   * @returns
+   */
+  public unpublish(id: string) {
+    return this.productRepository.update(id, { enable: false })
   }
 
   /**

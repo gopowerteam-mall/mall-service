@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  MinLength,
 } from 'class-validator'
 import { pipe } from 'rxjs'
 import { WhereOperator } from 'src/config/enum.config'
@@ -60,7 +61,7 @@ export class createProductSpecInput {
 }
 
 export class CreateProductInput {
-  @ApiProperty({ description: '标题', required: true })
+  @ApiProperty({ description: '标题' })
   @IsString()
   title: string
 
@@ -70,6 +71,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: '关键字' })
   @IsString({ each: true })
+  @MinLength(1)
   keyword: string[]
 
   @ApiProperty({ description: '推荐' })
@@ -78,6 +80,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: 'Bannner' })
   @IsString({ each: true })
+  @MinLength(1)
   banners: string[]
 
   @ApiProperty({ description: '封面' })
@@ -86,27 +89,12 @@ export class CreateProductInput {
 
   @ApiProperty({ description: '内容图' })
   @IsString({ each: true })
+  @MinLength(1)
   contents: string[]
 
   @ApiProperty({ description: '分类' })
   @IsString()
   categoryId: string
-
-  @ApiProperty({
-    description: '属性',
-    type: CreateProductAttrInput,
-    isArray: true,
-  })
-  @Type(() => CreateProductAttrInput)
-  attrs: CreateProductAttrInput[]
-
-  @ApiProperty({
-    description: '规格项',
-    type: createProductSpecInput,
-    isArray: true,
-  })
-  @Type(() => createProductSpecInput)
-  specs: createProductSpecInput[]
 }
 
 export class UpdateProductInput extends PartialType(CreateProductInput) {}
@@ -132,4 +120,14 @@ export class FindProductInput extends pipe(
     return obj[key] === 'true'
   })
   recommended?: boolean
+}
+
+export class PublishProductInput {
+  @ApiProperty({ description: '商品ID' })
+  @IsUUID()
+  id: string
+
+  @ApiProperty({ description: '商品配置版本ID' })
+  @IsUUID()
+  versionId: string
 }

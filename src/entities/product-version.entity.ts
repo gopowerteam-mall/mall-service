@@ -26,7 +26,7 @@ export class ProductVersion extends pipe(
   version: number
 
   @ApiProperty({ description: '关联商品' })
-  @ManyToOne(() => Product, (product) => product.version)
+  @ManyToOne(() => Product, (product) => product.versions)
   product: Product
 
   @ApiProperty({ description: '关联商品属性' })
