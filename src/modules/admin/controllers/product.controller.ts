@@ -14,8 +14,10 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger'
+import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
+import { UUIDInput } from 'src/shared/typeorm/dto/uuid.input'
 import {
   CreateProductInput,
   FindProductInput,
@@ -82,7 +84,7 @@ export class ProductController {
   @Put(':id')
   @ApiOperation({ operationId: 'updateProduct', summary: '更新商品' })
   @ApiOkResponse({ type: Product })
-  async update(@Param() { id }: IdInput, @Body() input: UpdateProductInput) {
+  async update(@Param() { id }: UUIDInput, @Body() input: UpdateProductInput) {
     const { categoryId, ...product } = input
 
     const getCategoryInput = async () => {
@@ -115,16 +117,23 @@ export class ProductController {
   @Put('unpublish/:id')
   @ApiOperation({ operationId: 'unpublishProduct', summary: '下架商品' })
   @ApiOkResponse({ type: Product })
-  async unpublish(@Param() { id }: IdInput) {
+  async unpublish(@Param() { id }: UUIDInput) {
     return this.productService.unpublish(id)
   }
 
-  @Delete(':id')
+  /**
+   * 创建商品配置版本
+   * @param param0
+   * @param input
+   * @returns
+   */
+  @Post(':id/version')
   @ApiOperation({
-    operationId: 'deleteProduct',
-    summary: '删除商品',
+    operationId: 'createProductVersion',
+    summary: '创建商品配置版本',
   })
-  delete(@Param() {}: IdInput) {
-    return
+  @ApiOkResponse({ type: ProductVersion })
+  public createProductVersion(@Param() { id: productId }: UUIDInput) {
+    return this.productService.createProductVersion(productId)
   }
 }

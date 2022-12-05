@@ -160,6 +160,22 @@ export class ProductService {
   }
 
   /**
+   * 创建商品版本
+   * @param product
+   * @returns
+   */
+  public async createProductVersion(productId: string) {
+    const product = await this.productRepository.findOneBy({ id: productId })
+    const version = this.productVersionRepository.create()
+
+    // 设置关联商品
+    version.product = product
+    version.enable = false
+
+    return this.productVersionRepository.save(product)
+  }
+
+  /**
    * 创建商品属性
    */
   public createProductAttr(attr: CreateProductAttrInput) {
