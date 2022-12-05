@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
-import { where } from 'ramda'
-import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
@@ -10,12 +8,7 @@ import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
-import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { DataSource, Repository } from 'typeorm'
-import {
-  CreateProductAttrInput,
-  createProductSpecInput,
-} from '../dtos/product.dto'
 
 @Injectable()
 export class ProductService {
@@ -176,25 +169,46 @@ export class ProductService {
   }
 
   /**
-   * 创建商品属性
+   * 配置商品属性
+   * @param versionId
+   * @param attrsInput
    */
-  public createProductAttr(attr: CreateProductAttrInput) {
-    // const items = attr.items.map((item) =>
-    //   this.productAttrItemRepository.create(item),
-    // )
-    // return this.productAttrRepository.create({
-    //   name: attr.name,
-    //   primary: attr.primary,
-    //   items,
-    // })
+  public async setupProductAttrs(
+    versionId: string,
+    attrsInput: Partial<ProductAttr>[],
+  ) {
+    const version = await this.productVersionRepository.findOneBy({
+      id: versionId,
+    })
+
+    const productAttrs = attrsInput.map((attr) => {
+      const productAttr = this.productAttrRepository.create(attr)
+      productAttr.version = version
+      return productAttr
+    })
+
+    await this.dataSource.manager.transaction(async (manager) => {
+      return Promise.all(
+        productAttrs.map((attr) => {
+          return attr.save({ reload: true })
+        }),
+      )
+    })
   }
 
   /**
-   * 创建商品Spec
+   * 创建商品属性
    */
-  public createProductSpec(spac: createProductSpecInput) {
-    // return this.productSpecRepository.create(spac)
-  }
+  // public setupProductAttr(attr: CreateProductAttrInput) {
+  // const items = attr.items.map((item) =>
+  //   this.productAttrItemRepository.create(item),
+  // )
+  // return this.productAttrRepository.create({
+  //   name: attr.name,
+  //   primary: attr.primary,
+  //   items,
+  // })
+  // }
 
   /**
    * 保存产品图片

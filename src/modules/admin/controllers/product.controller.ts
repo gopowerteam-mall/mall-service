@@ -22,6 +22,7 @@ import {
   CreateProductInput,
   FindProductInput,
   PublishProductInput,
+  SetupProductAttrsInput,
   UpdateProductInput,
 } from '../dtos/product.dto'
 import { CategoryService } from '../services/category.service'
@@ -135,5 +136,23 @@ export class ProductController {
   @ApiOkResponse({ type: ProductVersion })
   public createProductVersion(@Param() { id: productId }: UUIDInput) {
     return this.productService.createProductVersion(productId)
+  }
+
+  /**
+   * 配置商品属性项
+   * @param param0
+   * @param input
+   */
+  @Post(':id/product-attrs')
+  @ApiOperation({
+    operationId: 'setupProductAttrs',
+    summary: '配置商品属性项',
+  })
+  @ApiOkResponse({ type: ProductVersion })
+  public setupProductAttrs(
+    @Param() { id: versionId }: UUIDInput,
+    @Body() { attrs }: SetupProductAttrsInput,
+  ) {
+    return this.productService.setupProductAttrs(versionId, attrs)
   }
 }

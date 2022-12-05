@@ -17,7 +17,7 @@ import { OrderInput } from 'src/shared/typeorm/query/inputs/order.input'
 import { PageInput } from 'src/shared/typeorm/query/inputs/page.input'
 import { QueryInput } from 'src/shared/typeorm/query/inputs/query.input'
 
-export class createProductAttrItemInput {
+export class productAttrItemInput {
   @ApiProperty({ description: '属性ID' })
   @IsUUID()
   id: string
@@ -32,7 +32,7 @@ export class createProductAttrItemInput {
   image: string
 }
 
-export class CreateProductAttrInput {
+export class productAttrInput {
   @ApiProperty({ description: '属性名称' })
   @IsString()
   name: string
@@ -40,24 +40,40 @@ export class CreateProductAttrInput {
   @ApiProperty({ description: '是否是主属性' })
   @IsBoolean()
   primary: boolean
-
-  @ApiProperty({
-    description: '属性项',
-    type: createProductAttrItemInput,
-    isArray: true,
-  })
-  @Type(() => createProductAttrItemInput)
-  items: createProductAttrItemInput[]
 }
 
-export class createProductSpecInput {
-  @ApiProperty({ description: '属性项组合[]' })
+export class productSpecInput {
+  @ApiProperty({ description: '属性项组合' })
   @IsString({ each: true })
   items: string[]
 
   @ApiProperty()
   @IsNumber()
   price: number
+}
+
+export class SetupProductAttrsInput {
+  @ApiProperty({
+    description: '商品属性列表',
+  })
+  @Type(() => productAttrInput)
+  attrs: productAttrInput[]
+}
+
+export class SetupProductAttrItemsInput {
+  @ApiProperty({
+    description: '商品属性项列表',
+  })
+  @Type(() => productAttrInput)
+  items: productAttrItemInput[]
+}
+
+export class SetupProductSpecsInput {
+  @ApiProperty({
+    description: '商品Spec列表',
+  })
+  @Type(() => productAttrInput)
+  specs: productSpecInput[]
 }
 
 export class CreateProductInput {
