@@ -43,9 +43,9 @@ export class productAttrInput {
 }
 
 export class productSpecInput {
-  @ApiProperty({ description: '属性项组合' })
-  @IsString({ each: true })
-  items: string[]
+  @ApiProperty({ description: 'SpecId' })
+  @IsUUID()
+  id: string
 
   @ApiProperty()
   @IsNumber()
@@ -146,4 +146,28 @@ export class PublishProductInput {
   @ApiProperty({ description: '商品配置版本ID' })
   @IsUUID()
   versionId: string
+}
+
+export class UpdateProductAttrInput {
+  @ApiProperty({ description: '属性名称' })
+  @IsString()
+  name: string
+}
+
+export class UpdateProductAttrItemInput {
+  @ApiProperty({ description: '属性项名称' })
+  @IsString()
+  @IsOptional()
+  name?: string
+
+  @ApiProperty({ description: '属性项图片' })
+  @IsString()
+  @IsOptional()
+  image?: string
+}
+
+export class UpdateProductSpecInput {
+  @ApiProperty({ description: '价格' })
+  @IsNumber()
+  price: number
 }

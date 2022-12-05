@@ -14,6 +14,9 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger'
+import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
+import { ProductAttr } from 'src/entities/product-attr.entity'
+import { ProductSpec } from 'src/entities/product-spec.entity'
 import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
@@ -23,7 +26,10 @@ import {
   FindProductInput,
   PublishProductInput,
   SetupProductAttrsInput,
+  UpdateProductAttrInput,
+  UpdateProductAttrItemInput,
   UpdateProductInput,
+  UpdateProductSpecInput,
 } from '../dtos/product.dto'
 import { CategoryService } from '../services/category.service'
 import { ProductService } from '../services/product.service'
@@ -148,11 +154,64 @@ export class ProductController {
     operationId: 'setupProductAttrs',
     summary: '配置商品属性项',
   })
-  @ApiOkResponse({ type: ProductVersion })
+  @ApiOkResponse({ type: ProductAttr, isArray: true })
   public setupProductAttrs(
     @Param() { id: versionId }: UUIDInput,
     @Body() { attrs }: SetupProductAttrsInput,
   ) {
     return this.productService.setupProductAttrs(versionId, attrs)
+  }
+
+  /**
+   * 更新商品属性
+   * @param input
+   */
+  @Put('product-attr/:id')
+  @ApiOperation({
+    operationId: 'updateProductAttr',
+    summary: '更新商品属性',
+  })
+  @ApiOkResponse({ type: ProductAttr })
+  public updateProductAttr(
+    @Param() { id }: UUIDInput,
+    @Body() input: UpdateProductAttrInput,
+  ) {
+    this.productService.updateProductAttr(id, input)
+  }
+
+  /**
+   * 更新商品属性项
+   * @param param0
+   * @param input
+   */
+  @Put('product-attr-item/:id')
+  @ApiOperation({
+    operationId: 'updateProductAttrItem',
+    summary: '更新商品属性项',
+  })
+  @ApiOkResponse({ type: ProductAttrItem })
+  public updateProductAttrItem(
+    @Param() { id }: UUIDInput,
+    @Body() input: UpdateProductAttrItemInput,
+  ) {
+    this.productService.updateProductAttrItem(id, input)
+  }
+
+  /**
+   * 更新商品Spec
+   * @param param0
+   * @param input
+   */
+  @Put('product-spec/:id')
+  @ApiOperation({
+    operationId: 'updateProductSpec',
+    summary: '更新商品Spec',
+  })
+  @ApiOkResponse({ type: ProductSpec })
+  public updateProductSpec(
+    @Param() { id }: UUIDInput,
+    @Body() input: UpdateProductSpecInput,
+  ) {
+    this.productService.updateProductSpec(id, input)
   }
 }

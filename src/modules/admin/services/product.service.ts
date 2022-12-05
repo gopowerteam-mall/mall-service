@@ -9,6 +9,11 @@ import { Product } from 'src/entities/product.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
 import { DataSource, Repository } from 'typeorm'
+import {
+  UpdateProductAttrInput,
+  UpdateProductAttrItemInput,
+  UpdateProductSpecInput,
+} from '../dtos/product.dto'
 
 @Injectable()
 export class ProductService {
@@ -197,18 +202,47 @@ export class ProductService {
   }
 
   /**
-   * 创建商品属性
+   * 更新商品属性
+   * @param id
+   * @param input
+   * @returns
    */
-  // public setupProductAttr(attr: CreateProductAttrInput) {
-  // const items = attr.items.map((item) =>
-  //   this.productAttrItemRepository.create(item),
-  // )
-  // return this.productAttrRepository.create({
-  //   name: attr.name,
-  //   primary: attr.primary,
-  //   items,
-  // })
-  // }
+  public updateProductAttr(id: string, input: UpdateProductAttrInput) {
+    return this.productAttrRepository.update(id, {
+      name: input.name,
+    })
+  }
+
+  /**
+   * 更新商品属性项
+   * @param id
+   * @param input
+   * @returns
+   */
+  public async updateProductAttrItem(
+    id: string,
+    input: UpdateProductAttrItemInput,
+  ) {
+    if (input.image) {
+      await this.fileService.save(input.image)
+    }
+
+    return this.productAttrItemRepository.update(id, {
+      ...input,
+    })
+  }
+
+  /**
+   * 更新商品Spec
+   * @param id
+   * @param input
+   * @returns
+   */
+  public updateProductSpec(id: string, input: UpdateProductSpecInput) {
+    return this.productSpecRepository.update(id, {
+      price: input.price,
+    })
+  }
 
   /**
    * 保存产品图片
