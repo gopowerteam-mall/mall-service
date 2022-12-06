@@ -25,7 +25,9 @@ import {
   CreateProductInput,
   FindProductInput,
   PublishProductInput,
+  SetupProductAttrItemsInput,
   SetupProductAttrsInput,
+  SetupProductSpecsInput,
   UpdateProductAttrInput,
   UpdateProductAttrItemInput,
   UpdateProductInput,
@@ -160,6 +162,34 @@ export class ProductController {
     @Body() { attrs }: SetupProductAttrsInput,
   ) {
     return this.productService.setupProductAttrs(versionId, attrs)
+  }
+
+  /**
+   * 配置商品属性项
+   * @param param0
+   * @param input
+   */
+  @Post(':id/product-attr-items')
+  @ApiOperation({
+    operationId: 'setupProductAttrItems',
+    summary: '配置商品属性项',
+  })
+  @ApiOkResponse({ type: ProductSpec, isArray: true })
+  public setupProductAttrItems(
+    @Param() { id: versionId }: UUIDInput,
+    @Body() { items }: SetupProductAttrItemsInput,
+  ) {
+    return this.productService.setupProductAttrItems(versionId, items)
+  }
+
+  @Post(':id/product-specs')
+  @ApiOperation({
+    operationId: 'setupProductSpecs',
+    summary: '配置商品Specs',
+  })
+  @ApiOkResponse({ type: ProductSpec, isArray: true })
+  public setupProductSpecs(@Body() { specs }: SetupProductSpecsInput) {
+    return this.productService.setupProductSpecs(specs)
   }
 
   /**

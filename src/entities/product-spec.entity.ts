@@ -32,5 +32,5 @@ export class ProductSpec extends pipe(
 
   @ApiProperty()
   @Column()
-  price: number
+  price?: number
 }

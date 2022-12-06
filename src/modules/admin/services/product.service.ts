@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
+import { where } from 'ramda'
+import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductAttr } from 'src/entities/product-attr.entity'
@@ -8,8 +10,12 @@ import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { FileService } from 'src/modules/qiniu/services/file.service'
 import { QueryInputParam } from 'src/shared/typeorm/interfaces'
+import { buildPaginator } from 'src/shared/typeorm/query/paginator'
 import { DataSource, Repository } from 'typeorm'
 import {
+  ProductAttrInput,
+  ProductAttrItemInput,
+  ProductSpecInput,
   UpdateProductAttrInput,
   UpdateProductAttrItemInput,
   UpdateProductSpecInput,
@@ -41,22 +47,26 @@ export class ProductService {
     page,
     order,
   }: QueryInputParam<Product>) {
-    // const builder = this.productRepository
-    //   .createQueryBuilder('product')
-    //   .leftJoinAndSelect('product.attrs', 'attrs')
-    //   .leftJoinAndSelect('attrs.items', 'items')
-    //   .leftJoinAndSelect('product.specs', 'specs')
-    // builder.andWhere(buildWhereQuery())
-    // const paginator = buildPaginator({
-    //   mode: PaginatorMode.Index,
-    //   entity: Product,
-    //   query: {
-    //     order: order,
-    //     skip: page.skip,
-    //     limit: page.limit,
-    //   },
-    // })
-    // return paginator.paginate(builder)
+    const builder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.versions', 'versions')
+      .leftJoinAndSelect('versions.attrs', 'attrs')
+      .leftJoinAndSelect('versions.specs', 'specs')
+      .leftJoinAndSelect('attrs.items', 'items')
+    // .leftJoinAndSelect('product.attrs', 'attrs')
+    // .leftJoinAndSelect('attrs.items', 'items')
+    // .leftJoinAndSelect('product.specs', 'specs')
+    builder.andWhere(buildWhereQuery())
+    const paginator = buildPaginator({
+      mode: PaginatorMode.Index,
+      entity: Product,
+      query: {
+        order: order,
+        skip: page.skip,
+        limit: page.limit,
+      },
+    })
+    return paginator.paginate(builder)
   }
 
   /**
@@ -180,7 +190,7 @@ export class ProductService {
    */
   public async setupProductAttrs(
     versionId: string,
-    attrsInput: Partial<ProductAttr>[],
+    attrsInput: ProductAttrInput[],
   ) {
     const version = await this.productVersionRepository.findOneBy({
       id: versionId,
@@ -199,6 +209,106 @@ export class ProductService {
         }),
       )
     })
+  }
+
+  /**
+   * 配置商品属性项
+   * @param versionId
+   * @param itemsInput
+   * @returns
+   */
+  public async setupProductAttrItems(
+    versionId: string,
+    itemsInput: ProductAttrItemInput[],
+  ) {
+    const attrs = await this.productAttrRepository.find({
+      where: { version: { id: versionId } },
+    })
+
+    // 保存图片
+    for (let item of itemsInput) {
+      if (item.image) {
+        await this.fileService.save(item.image)
+      }
+    }
+
+    // 获取AttrItems
+    let items = itemsInput.map((item) => {
+      const attrItem = this.productAttrItemRepository.create({
+        name: item.name,
+        image: item.image,
+      })
+
+      attrItem.attr = attrs.find((attr) => attr.id === item.attrId)
+
+      return attrItem
+    })
+
+    // 更新items
+    await this.productAttrItemRepository.save(items, { reload: true })
+
+    // 生成Specs
+    return this.productAttrItemRepository.save(
+      await this.generateProductSpecs(versionId),
+      { reload: true },
+    )
+  }
+
+  /**
+   * 配置商品Specs
+   * @param specsInput
+   * @returns
+   */
+  public async setupProductSpecs(specsInput: ProductSpecInput[]) {
+    await this.dataSource.manager.transaction(async (manager) => {
+      return Promise.all(
+        specsInput
+          .filter((spec) => spec.price)
+          .map((spec) =>
+            this.productSpecRepository.update(spec.id, { price: spec.price }),
+          ),
+      )
+    })
+  }
+
+  /**
+   * 生成商品Spec
+   * @param versionId
+   * @returns
+   */
+  public async generateProductSpecs(versionId: string) {
+    const version = await this.productVersionRepository.findOneBy({
+      id: versionId,
+    })
+
+    const attrs = await this.productAttrRepository.find({
+      where: { version: { id: versionId } },
+      relations: { items: true },
+    })
+
+    const results: ProductAttrItem[][] = []
+
+    const generate = (startIndex = 0, current: ProductAttrItem[]) => {
+      if (startIndex === attrs.length) {
+        results.push(current)
+        return
+      }
+
+      const items = attrs[startIndex].items
+
+      for (let i = 0; i < items.length; i++) {
+        current.push(items[i])
+        generate(startIndex + 1, current)
+        current.pop()
+      }
+    }
+
+    return results.map((items) =>
+      this.productSpecRepository.create({
+        version,
+        items,
+      }),
+    )
   }
 
   /**
