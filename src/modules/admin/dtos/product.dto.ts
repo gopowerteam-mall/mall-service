@@ -2,12 +2,12 @@ import { Optional } from '@nestjs/common'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { Transform, Type } from 'class-transformer'
 import {
+  ArrayMinSize,
   IsBoolean,
   IsNumber,
   IsOptional,
   IsString,
   IsUUID,
-  MinLength,
 } from 'class-validator'
 import { pipe } from 'rxjs'
 import { WhereOperator } from 'src/config/enum.config'
@@ -57,6 +57,7 @@ export class SetupProductAttrsInput {
     description: '商品属性列表',
   })
   @Type(() => ProductAttrInput)
+  @ArrayMinSize(1)
   attrs: ProductAttrInput[]
 }
 
@@ -65,6 +66,7 @@ export class SetupProductAttrItemsInput {
     description: '商品属性项列表',
   })
   @Type(() => ProductAttrInput)
+  @ArrayMinSize(1)
   items: ProductAttrItemInput[]
 }
 
@@ -73,6 +75,7 @@ export class SetupProductSpecsInput {
     description: '商品Spec列表',
   })
   @Type(() => ProductAttrInput)
+  @ArrayMinSize(1)
   specs: ProductSpecInput[]
 }
 
@@ -87,7 +90,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: '关键字' })
   @IsString({ each: true })
-  @MinLength(1)
+  @ArrayMinSize(1)
   keyword: string[]
 
   @ApiProperty({ description: '推荐' })
@@ -96,7 +99,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: 'Bannner' })
   @IsString({ each: true })
-  @MinLength(1)
+  @ArrayMinSize(1)
   banners: string[]
 
   @ApiProperty({ description: '封面' })
@@ -105,7 +108,7 @@ export class CreateProductInput {
 
   @ApiProperty({ description: '内容图' })
   @IsString({ each: true })
-  @MinLength(1)
+  @ArrayMinSize(1)
   contents: string[]
 
   @ApiProperty({ description: '分类' })
