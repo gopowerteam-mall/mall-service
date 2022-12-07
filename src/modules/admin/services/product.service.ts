@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
+import { product } from 'ramda'
 import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
@@ -79,6 +80,36 @@ export class ProductService {
       .leftJoinAndSelect('attr.items', 'attr_item')
       .leftJoinAndSelect('spec.items', 'spec_item')
       .where('product.id = :id', { id })
+
+    return builder.getOne()
+  }
+
+  /**
+   * 获取所有商品版本
+   */
+  public findAllVersion(productId: string) {
+    const builder = this.productVersionRepository
+      .createQueryBuilder('version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
+      .where('version.product_id = :id', { id: productId })
+
+    return builder.getMany()
+  }
+
+  /**
+   * 获取指定商品版本
+   */
+  public findOneVersion(versionId: string) {
+    const builder = this.productVersionRepository
+      .createQueryBuilder('version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
+      .where('version.id = :id', { id: versionId })
 
     return builder.getOne()
   }

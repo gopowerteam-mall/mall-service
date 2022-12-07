@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm'
 import { pipe } from 'ramda'
 import { EntityClass, EntityWithUUID } from '../shared/typeorm/entity'
 import { ApiProperty } from '@nestjs/swagger'
@@ -44,6 +44,7 @@ export class ProductOrderItem extends pipe(
    */
   @ApiProperty({ description: '商品订单' })
   @ManyToOne(() => ProductOrder, (order) => order.items)
+  @JoinColumn({ name: 'product_order_id' })
   productOrder: ProductOrder
 
   /**

@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -29,5 +29,6 @@ export class ProductAttrItem extends pipe(
 
   @ApiProperty({ description: '所属属性' })
   @ManyToOne(() => ProductAttr, (attr) => attr.items)
+  @JoinColumn({ name: 'attr_id' })
   attr: ProductAttr
 }

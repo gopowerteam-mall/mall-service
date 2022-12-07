@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne } from 'typeorm'
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -30,6 +30,7 @@ export class ProductAttr extends pipe(
 
   @ApiProperty({ description: '所属商品版本' })
   @ManyToOne(() => ProductVersion, (version) => version.attrs)
+  @JoinColumn({ name: 'version_id' })
   version: ProductVersion
 
   @ApiProperty({ description: '属性项' })

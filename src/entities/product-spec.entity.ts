@@ -1,4 +1,11 @@
-import { Entity, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  JoinColumn,
+} from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithTime,
@@ -23,6 +30,7 @@ export class ProductSpec extends pipe(
 )(EntityClass) {
   @ApiProperty({ description: '删除' })
   @ManyToOne(() => ProductVersion, (productVersion) => productVersion.specs)
+  @JoinColumn({ name: 'version_id' })
   version: ProductVersion
 
   @ApiProperty({ description: '属性项组合' })

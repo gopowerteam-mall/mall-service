@@ -1,12 +1,4 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  OneToMany,
-  TreeParent,
-  TreeChildren,
-  Tree,
-} from 'typeorm'
+import { Entity, Column, TreeParent, TreeChildren, Tree } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithEnable,

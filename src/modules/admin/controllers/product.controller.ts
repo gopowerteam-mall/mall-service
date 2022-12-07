@@ -70,6 +70,30 @@ export class ProductController {
   }
 
   /**
+   * 查询所有商品版本
+   * @param input
+   * @returns
+   */
+  @Get(':id/version')
+  @ApiOperation({ operationId: 'findVersion', summary: '获取商品所有版本' })
+  @ApiOkResponse({ type: ProductVersion })
+  findAllVersion(@Param() { id }: UUIDInput) {
+    return this.productService.findAllVersion(id)
+  }
+
+  /**
+   * 查询指定ID商品版本
+   * @param input
+   * @returns
+   */
+  @Get('version/:id')
+  @ApiOperation({ operationId: 'getVersion', summary: '获取商品指定版本' })
+  @ApiOkResponse({ type: ProductVersion })
+  findOneVersion(@Param() { id }: IdInput) {
+    return this.productService.findOneVersion(id)
+  }
+
+  /**
    * 创建商品信息
    * @param input
    */
