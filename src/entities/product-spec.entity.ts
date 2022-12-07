@@ -31,6 +31,6 @@ export class ProductSpec extends pipe(
   items: ProductAttrItem[]
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   price?: number
 }

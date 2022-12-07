@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
-import { where } from 'ramda'
 import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
@@ -49,13 +48,12 @@ export class ProductService {
   }: QueryInputParam<Product>) {
     const builder = this.productRepository
       .createQueryBuilder('product')
-      .leftJoinAndSelect('product.versions', 'versions')
-      .leftJoinAndSelect('versions.attrs', 'attrs')
-      .leftJoinAndSelect('versions.specs', 'specs')
-      .leftJoinAndSelect('attrs.items', 'items')
-    // .leftJoinAndSelect('product.attrs', 'attrs')
-    // .leftJoinAndSelect('attrs.items', 'items')
-    // .leftJoinAndSelect('product.specs', 'specs')
+      .leftJoinAndSelect('product.versions', 'version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
+
     builder.andWhere(buildWhereQuery())
     const paginator = buildPaginator({
       mode: PaginatorMode.Index,
@@ -73,15 +71,16 @@ export class ProductService {
    * 查询商品详情
    */
   public findOne(id: string) {
-    // const builder = this.productRepository
-    //   .createQueryBuilder('product')
-    //   .leftJoinAndSelect('product.attrs', 'attrs')
-    //   .leftJoinAndSelect('attrs.items', 'items')
-    //   .leftJoinAndSelect('product.specs', 'specs')
-    // builder.andWhere(`product.id = :id`, {
-    //   id,
-    // })
-    // return builder.getOne()
+    const builder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.versions', 'version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
+      .where('product.id = :id', { id })
+
+    return builder.getOne()
   }
 
   /**
@@ -92,11 +91,13 @@ export class ProductService {
     // 保存相关图片
     await this.saveProductImages(input)
     // 创建商品
-    return this.productRepository.create({
+    const product = this.productRepository.create({
       ...input,
       category,
       enable: false, // 创建商品不会自动上架
     })
+
+    return product.save({ reload: true })
   }
 
   /**
@@ -180,7 +181,7 @@ export class ProductService {
     version.product = product
     version.enable = false
 
-    return this.productVersionRepository.save(product)
+    return version.save({ reload: true })
   }
 
   /**
@@ -196,19 +197,14 @@ export class ProductService {
       id: versionId,
     })
 
+    // 生成商品属性实体
     const productAttrs = attrsInput.map((attr) => {
       const productAttr = this.productAttrRepository.create(attr)
       productAttr.version = version
       return productAttr
     })
 
-    await this.dataSource.manager.transaction(async (manager) => {
-      return Promise.all(
-        productAttrs.map((attr) => {
-          return attr.save({ reload: true })
-        }),
-      )
-    })
+    return this.productAttrRepository.save(productAttrs, { reload: true })
   }
 
   /**
@@ -248,10 +244,9 @@ export class ProductService {
     await this.productAttrItemRepository.save(items, { reload: true })
 
     // 生成Specs
-    return this.productAttrItemRepository.save(
-      await this.generateProductSpecs(versionId),
-      { reload: true },
-    )
+    const specs = await this.generateProductSpecs(versionId)
+
+    return this.productSpecRepository.save(specs, { reload: true })
   }
 
   /**
@@ -260,7 +255,7 @@ export class ProductService {
    * @returns
    */
   public async setupProductSpecs(specsInput: ProductSpecInput[]) {
-    await this.dataSource.manager.transaction(async (manager) => {
+    return await this.dataSource.manager.transaction(async (manager) => {
       return Promise.all(
         specsInput
           .filter((spec) => spec.price)
@@ -290,7 +285,7 @@ export class ProductService {
 
     const generate = (startIndex = 0, current: ProductAttrItem[]) => {
       if (startIndex === attrs.length) {
-        results.push(current)
+        results.push([...current])
         return
       }
 
@@ -302,6 +297,9 @@ export class ProductService {
         current.pop()
       }
     }
+
+    // 遍历生成组合
+    generate(0, [])
 
     return results.map((items) =>
       this.productSpecRepository.create({

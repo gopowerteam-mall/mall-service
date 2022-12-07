@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm'
+import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
 import { pipe } from 'ramda'
 import {
   EntityWithEnable,
@@ -30,10 +30,10 @@ export class ProductVersion extends pipe(
   product: Product
 
   @ApiProperty({ description: '关联商品属性' })
-  @ManyToOne(() => ProductAttr, (productAttr) => productAttr.version)
+  @OneToMany(() => ProductAttr, (productAttr) => productAttr.version)
   attrs: ProductAttr[]
 
   @ApiProperty({ description: '关联商品Spec' })
-  @ManyToOne(() => ProductSpec, (productSpec) => productSpec.version)
+  @OneToMany(() => ProductSpec, (productSpec) => productSpec.version)
   specs: ProductSpec[]
 }
