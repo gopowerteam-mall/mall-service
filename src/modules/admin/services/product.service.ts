@@ -228,6 +228,10 @@ export class ProductService {
       id: versionId,
     })
 
+    if (!version) {
+      throw new Error('无法找对应商品版本')
+    }
+
     // 生成商品属性实体
     const productAttrs = attrsInput.map((attr) => {
       const productAttr = this.productAttrRepository.create(attr)
@@ -252,6 +256,10 @@ export class ProductService {
       where: { version: { id: versionId } },
     })
 
+    if (!attrs || !attrs.length) {
+      throw new Error('无法找对应商品版本的属性')
+    }
+
     // 保存图片
     for (let item of itemsInput) {
       if (item.image) {
@@ -267,6 +275,10 @@ export class ProductService {
       })
 
       attrItem.attr = attrs.find((attr) => attr.id === item.attrId)
+
+      if (!attrItem.attr) {
+        throw new Error('属性ID配置错误')
+      }
 
       return attrItem
     })
