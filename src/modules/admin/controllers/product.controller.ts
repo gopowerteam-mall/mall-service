@@ -77,7 +77,7 @@ export class ProductController {
    */
   @Get(':id/version')
   @ApiOperation({ operationId: 'findVersion', summary: '获取商品所有版本' })
-  @ApiOkResponse({ type: ProductVersion })
+  @ApiOkResponse({ type: ProductVersion, isArray: true })
   findAllVersion(@Param() { id }: UUIDInput) {
     return this.productService.findAllVersion(id)
   }
