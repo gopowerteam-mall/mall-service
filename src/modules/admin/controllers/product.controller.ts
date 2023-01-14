@@ -21,6 +21,7 @@ import { ProductVersion } from 'src/entities/product-version.entity'
 import { Product } from 'src/entities/product.entity'
 import { IdInput } from 'src/shared/typeorm/dto/id.input'
 import { UUIDInput } from 'src/shared/typeorm/dto/uuid.input'
+import { toPageResponse } from 'src/shared/typeorm/responses/page.response'
 import {
   CreateProductInput,
   FindProductInput,
@@ -52,7 +53,7 @@ export class ProductController {
    */
   @Get()
   @ApiOperation({ operationId: 'findProduct', summary: '查询商品' })
-  @ApiOkResponse({ type: Product, isArray: true })
+  @ApiOkResponse({ type: toPageResponse(Product) })
   findAll(@Query() input: FindProductInput) {
     return this.productService.findAll(input.params)
   }
