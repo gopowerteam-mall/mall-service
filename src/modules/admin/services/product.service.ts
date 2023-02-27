@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm'
-import { product } from 'ramda'
 import { PaginatorMode } from 'src/config/enum.config'
 import { Category } from 'src/entities/category.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
@@ -298,7 +297,7 @@ export class ProductService {
    * @returns
    */
   public async setupProductSpecs(specsInput: ProductSpecInput[]) {
-    return await this.dataSource.manager.transaction(async (manager) => {
+    return await this.dataSource.manager.transaction(async () => {
       return Promise.all(
         specsInput
           .filter((spec) => spec.price)

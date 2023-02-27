@@ -15,6 +15,7 @@ import { ProductAttr } from 'src/entities/product-attr.entity'
 import { ProductAttrItem } from 'src/entities/product-attr-item.entity'
 import { ProductSpec } from 'src/entities/product-spec.entity'
 import { CategoryController } from './controllers/category.controller';
+import { ProductController } from './controllers/product.controller';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { CategoryController } from './controllers/category.controller';
       ProductSpec,
     ]),
   ],
-  controllers: [AppController, HomeController, CategoryController],
+  controllers: [AppController, HomeController, CategoryController, ProductController],
   providers: [AppService, BannerService, CategoryService, ProductService],
 })
 export class ClientModule {}

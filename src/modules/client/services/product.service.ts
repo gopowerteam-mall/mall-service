@@ -51,4 +51,20 @@ export class ProductService {
 
     return paginator.paginate(builder)
   }
+
+  /**
+   * 查询商品详情
+   */
+  public findOne(id: string) {
+    const builder = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.versions', 'version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
+      .where('product.id = :id', { id })
+
+    return builder.getOne()
+  }
 }

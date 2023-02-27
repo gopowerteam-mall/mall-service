@@ -20,7 +20,6 @@ export class ProductAttrItem extends pipe(
   EntityWithOperator,
 )(EntityClass) {
   @ApiProperty({ description: '属性项名称' })
-  @Column({ unique: true })
   name: string
 
   @ApiProperty({ description: '图片' })
