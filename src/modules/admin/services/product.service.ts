@@ -261,14 +261,14 @@ export class ProductService {
     }
 
     // 保存图片
-    for (let item of itemsInput) {
+    for (const item of itemsInput) {
       if (item.image) {
         await this.fileService.save(item.image)
       }
     }
 
     // 获取AttrItems
-    let items = itemsInput.map((item) => {
+    const items = itemsInput.map((item) => {
       const attrItem = this.productAttrItemRepository.create({
         name: item.name,
         image: item.image,

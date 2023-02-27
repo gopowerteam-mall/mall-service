@@ -30,9 +30,11 @@ export class ProductService {
   public async findAll({ buildWhereQuery, cursor }: QueryInputParam<Product>) {
     const builder = this.productRepository
       .createQueryBuilder('product')
-      .leftJoinAndSelect('product.attrs', 'attrs')
-      .leftJoinAndSelect('attrs.items', 'items')
-      .leftJoinAndSelect('product.specs', 'specs')
+      .leftJoinAndSelect('product.versions', 'version')
+      .leftJoinAndSelect('version.attrs', 'attr')
+      .leftJoinAndSelect('version.specs', 'spec')
+      .leftJoinAndSelect('attr.items', 'attr_item')
+      .leftJoinAndSelect('spec.items', 'spec_item')
 
     builder.andWhere(buildWhereQuery())
 
