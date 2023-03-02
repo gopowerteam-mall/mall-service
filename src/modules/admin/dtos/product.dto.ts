@@ -136,7 +136,7 @@ export class FindProductInput extends pipe(
   @Optional()
   @WhereOption({ type: WhereOperator.Equal })
   @Transform(({ obj, key }) => {
-    return obj[key] === 'true'
+    return obj[key] === 'true' || obj[key] === true
   })
   recommended?: boolean
 }

@@ -11,8 +11,6 @@ import { ApiProperty } from '@nestjs/swagger'
 import { EntityWithOperator } from 'src/shared/typeorm/entity/entity-with-operator'
 import { EntityWithCreator } from 'src/shared/typeorm/entity/entity-with-creator'
 import { Category } from './category.entity'
-import { ProductAttr } from './product-attr.entity'
-import { ProductSpec } from './product-spec.entity'
 import { ProductVersion } from './product-version.entity'
 
 @Entity('product')
@@ -63,17 +61,22 @@ export class Product extends pipe(
   @OneToMany(() => ProductVersion, (version) => version.product)
   versions: ProductVersion[]
 
-  @ApiProperty({ description: '最低价' })
+  @ApiProperty({ description: '最低价', type: 'number' })
   get minPrice() {
     return Math.min(...this.property.specs.map((spec) => spec.price))
   }
 
-  @ApiProperty({ description: '最高价' })
+  @ApiProperty({ description: '最高价', type: 'number' })
   get maxPrice() {
     return Math.max(...this.property.specs.map((spec) => spec.price))
   }
 
-  @ApiProperty({ description: '当前商品配置' })
+  @ApiProperty({
+    description: '当前商品配置',
+    type: ProductVersion,
+    required: false,
+    nullable: true,
+  })
   get property() {
     return this.versions
       .sort((x, y) => x.version - y.version)

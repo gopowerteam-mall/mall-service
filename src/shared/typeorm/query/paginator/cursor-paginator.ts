@@ -62,9 +62,9 @@ export class CursorPaginator<Entity> {
     builder: SelectQueryBuilder<Entity>,
   ): Promise<CursorPagingResult<Entity>> {
     const entities = await this.appendPagingQuery(builder).getMany()
-    const finished = entities.length > this.limit
+    const finished = entities.length < this.limit
 
-    if (finished) {
+    if (!finished) {
       entities.splice(entities.length - 1, 1)
     }
 

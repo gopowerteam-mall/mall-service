@@ -37,6 +37,7 @@ export class ProductService {
       .leftJoinAndSelect('spec.items', 'spec_item')
 
     builder.andWhere(buildWhereQuery())
+    builder.andWhere({ enable: true })
 
     const paginator = buildPaginator({
       mode: PaginatorMode.Cursor,

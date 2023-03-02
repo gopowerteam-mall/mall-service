@@ -9,6 +9,7 @@ import { Constructor } from '.'
  */
 export function EntityWithUUID<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
+    @ApiProperty({ description: 'ID', type: 'string' })
     @PrimaryGeneratedColumn('uuid')
     @ApiProperty()
     id: string

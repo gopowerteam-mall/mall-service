@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { RequestContext } from 'src/middlewaves/request-context.middlewave'
 import { BeforeInsert, Column } from 'typeorm'
 import { Constructor } from '.'
@@ -10,6 +11,7 @@ import { Constructor } from '.'
  */
 export function EntityWithCreator<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
+    @ApiProperty({ description: '创建人', type: 'string' })
     @Column()
     public creator: string
 

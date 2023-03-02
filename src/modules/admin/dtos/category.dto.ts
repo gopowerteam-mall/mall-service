@@ -38,7 +38,7 @@ export class FindCategoryInput extends QueryInput<Category> {
   @Optional()
   @WhereOption({ type: WhereOperator.Equal })
   @Transform(({ obj, key }) => {
-    return obj[key] === 'true'
+    return obj[key] === 'true' || obj[key] === true
   })
   recommended?: boolean
 
@@ -47,7 +47,7 @@ export class FindCategoryInput extends QueryInput<Category> {
   })
   @Optional()
   @Transform(({ obj, key }) => {
-    return obj[key] === 'true'
+    return obj[key] === 'true' || obj[key] === true
   })
   recursion?: boolean
 }

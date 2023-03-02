@@ -57,7 +57,9 @@ export class HomeController {
     const input = plainToInstance(FindProductInput, {
       recommended: true,
       size: 4,
+      enable: true,
     })
+
     // 返回查询结果
     return this.productService.findAll(input.params)
   }

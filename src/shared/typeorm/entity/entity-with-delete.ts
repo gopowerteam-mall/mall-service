@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger'
 import { DeleteDateColumn } from 'typeorm'
 import { Constructor } from '.'
 
@@ -9,6 +10,7 @@ import { Constructor } from '.'
  */
 export function EntityWithDelete<TBase extends Constructor>(Base: TBase) {
   abstract class AbstractBase extends Base {
+    @ApiProperty({ description: '删除时间', type: 'string' })
     @DeleteDateColumn({
       name: 'deleted_at',
       type: 'timestamp without time zone',

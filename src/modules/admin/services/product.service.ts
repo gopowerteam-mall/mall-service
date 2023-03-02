@@ -53,6 +53,7 @@ export class ProductService {
       .leftJoinAndSelect('version.specs', 'spec')
       .leftJoinAndSelect('attr.items', 'attr_item')
       .leftJoinAndSelect('spec.items', 'spec_item')
+      .leftJoinAndSelect('product.category', 'category')
 
     builder.andWhere(buildWhereQuery())
     const paginator = buildPaginator({
@@ -78,6 +79,7 @@ export class ProductService {
       .leftJoinAndSelect('version.specs', 'spec')
       .leftJoinAndSelect('attr.items', 'attr_item')
       .leftJoinAndSelect('spec.items', 'spec_item')
+      .leftJoinAndSelect('product.category', 'category')
       .where('product.id = :id', { id })
 
     return builder.getOne()

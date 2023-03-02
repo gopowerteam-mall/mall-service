@@ -13,7 +13,7 @@ export class FindProductInput extends pipe(CursorInput)(QueryInput<Product>) {
   @Optional()
   @WhereOption({ type: WhereOperator.Equal, entity: 'product' })
   @Transform(({ obj, key }) => {
-    return obj[key] === 'true'
+    return obj[key] === 'true' || obj[key] === true
   })
   recommended: boolean
 }
